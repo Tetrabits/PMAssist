@@ -67,7 +67,7 @@ namespace PMAssist.Managers
             var year = eventApi.Start.Year;
             var date = eventApi.Start.Day;
 
-            var id = "ED17HoP7ZWc24S8LPbV3tjEPo5d2";
+            var id = eventApi.UID;
             var url = $"{URL}/{year}/{month}/{id}/{date}.json";
             
 

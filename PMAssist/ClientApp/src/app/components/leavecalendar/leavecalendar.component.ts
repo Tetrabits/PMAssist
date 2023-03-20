@@ -116,7 +116,7 @@ export class LeaveCalendarComponent {
     this.actualEndDate = this.datepipe.transform(selectInfo.end, 'yyyy-MM-dd');
     let endDateVal = selectInfo.end.setDate(selectInfo.end.getDate() - 1);
     this.endDate = this.datepipe.transform(endDateVal, 'yyyy-MM-dd');
-    this.description = 'Logged in user PTO';
+    this.description = this.user.displayName + ' PTO';
     this.isAllDay = selectInfo.allDay;
     this.displayResponsive = true;
   }
@@ -203,8 +203,8 @@ export class LeaveCalendarComponent {
       UID: this.user.uid,
       Start: this.startDate,
       End: this.endDate,
-      IsHalfDay: false,
-      AuthToken: "sadjfsaldf"
+      IsHalfDay: this.isAllDay,
+      AuthToken: this.user.token
     });
   }
   createEventId(eventGuid: number) {
