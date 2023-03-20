@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMAssist", "PMAssist\PMAssist.csproj", "{45DAC051-4C18-472A-857B-1FF806346DAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMAssist.Test", "PMAssistTest\PMAssist.Test.csproj", "{41D97462-D20F-45D4-8569-30EE77E5ED24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMAssist.Test", "PMAssist.Test\PMAssist.Test.csproj", "{76CFFD28-8C7B-442A-A7A8-003A4D82AB4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{45DAC051-4C18-472A-857B-1FF806346DAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45DAC051-4C18-472A-857B-1FF806346DAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45DAC051-4C18-472A-857B-1FF806346DAB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{41D97462-D20F-45D4-8569-30EE77E5ED24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{41D97462-D20F-45D4-8569-30EE77E5ED24}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{41D97462-D20F-45D4-8569-30EE77E5ED24}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{41D97462-D20F-45D4-8569-30EE77E5ED24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76CFFD28-8C7B-442A-A7A8-003A4D82AB4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76CFFD28-8C7B-442A-A7A8-003A4D82AB4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76CFFD28-8C7B-442A-A7A8-003A4D82AB4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76CFFD28-8C7B-442A-A7A8-003A4D82AB4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
