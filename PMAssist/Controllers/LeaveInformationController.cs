@@ -54,8 +54,8 @@ namespace PMAssist.Controllers
         [Route("addevent")]
         public async Task<IActionResult> AddEvent(LeaveInfo eventApi)
         {
-            var lm =  new LeaveManager();
-            await lm.AddEvent(eventApi);
+            var leaveManager =  new LeaveManager();
+            await leaveManager.AddEvent(eventApi);
             return Ok(eventApi);
         }
     }

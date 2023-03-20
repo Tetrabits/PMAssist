@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 export class NavMenuComponent {
   isExpanded = false;
   isLoggedIn = false;
-    handleUpdateResponse: any;
+
   constructor(
     public authService: AuthService,
     public router: Router,
@@ -46,8 +46,6 @@ export class NavMenuComponent {
           next: this.handleUpdateResponse.bind(this),
           error: this.handleError.bind(this)
         })
-      this.router.navigate(['leave-calendar']);
-      this.isLoggedIn = true;
     })
   }
 
@@ -57,5 +55,16 @@ export class NavMenuComponent {
       this.router.navigate(['']);
     })
   }
+
+  handleError(error: any) {
+    console.log(error);
+  }
+
+  handleUpdateResponse(response: any) {
+    console.log(response);
+    this.router.navigate(['leave-calendar']);
+    this.isLoggedIn = true;
+  }
+
 
 }
