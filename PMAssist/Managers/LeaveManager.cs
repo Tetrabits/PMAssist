@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using PMAssist.Interfaces;
+﻿using PMAssist.Interfaces;
 using PMAssist.Models;
+using System.Text;
 using System.Text.Json;
 
 namespace PMAssist.Managers
@@ -13,11 +13,11 @@ namespace PMAssist.Managers
         {
             dataAccess = dataAccessRepository;
         }
+
         public LeaveManager()
         {
 
         }
-
 
         static LeaveManager()
         {
@@ -59,6 +59,24 @@ namespace PMAssist.Managers
             }
 
             return events;
+        }
+
+        public async Task AddEvent(LeaveInfo eventApi)
+        {
+            var month = eventApi.Start.Month;
+            var year = eventApi.Start.Year;
+            var date = eventApi.Start.Day;
+
+            var id = "ED17HoP7ZWc24S8LPbV3tjEPo5d2";
+            var url = $"{URL}/{year}/{month}/{id}/{date}.json";
+            
+
+            var value = eventApi.IsHalfDay ? "4" : "8";
+            var kvp = $"{{\"PTO\":\"{value}\"}}";
+            var data = $"{{\"{id}\":{kvp}}}";
+
+            var utilizeData = await dataAccess.PatchData("asdfasd", url, kvp);
+            
         }
     }
 }

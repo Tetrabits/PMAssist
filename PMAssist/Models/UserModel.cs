@@ -1,4 +1,4 @@
-﻿namespace PMAssist.Managers
+﻿namespace PMAssist.Models
 {
     public class UserModel
     {

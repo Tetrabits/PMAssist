@@ -80,7 +80,7 @@ namespace PMAssist
 
             var patchData = new StringContent(data, Encoding.UTF8, "application/json");
 
-            var patchurl = BaseUrl + url + "/.json?auth=" + token;
+            var patchurl = BaseUrl + url + "?auth=" + token;
             using var client = new HttpClient();
 
             var response = await client.PatchAsync(patchurl, patchData);
