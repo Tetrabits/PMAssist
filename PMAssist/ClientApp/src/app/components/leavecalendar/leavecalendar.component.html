@@ -13,7 +13,7 @@
     <input id="txtStartDate" type="text" pInputText [(ngModel)]="startDate" placeholder="Start Date" class="padding-dev" [disabled]="disabled" />
     <label for="txtEndDate" class="block padding-dev">End Date:</label>
     <input id="txtEndDate" type="text" pInputText [(ngModel)]="endDate" placeholder="End Date" class="padding-dev" [disabled]="disabled" />
-    <p-checkbox [(ngModel)]="isAllDay" [binary]="true" inputId="binary" class="padding-dev">Half Day</p-checkbox>
+    <p-checkbox [(ngModel)]="isAllDay" [binary]="true" inputId="binary" class="padding-dev" (onChange)="allDayEvent($event)">Half Day</p-checkbox>
     <label for="binary">Half Day</label>
   </div>
 <div class="field padding-top-dev">
@@ -21,9 +21,9 @@
 </div>
 <ng-template pTemplate="footer">
   <p-button (click)="displayResponsive=false" label="Cancel" styleClass="p-button-text"></p-button>
-  <p-button (click)="saveLeaveInfo()" label="Submit" styleClass="p-button-text" [(visible)]="displaySaveButton"></p-button>
-  <p-button (click)="updateLeaveInfo()" label="Update" styleClass="p-button-text" [(visible)]="displayUpdateButton"></p-button>
-  <p-button (click)="deleteLeaveInfo()" label="Delete" styleClass="p-button-text" [(visible)]="displayDeleteButton"></p-button>
+  <p-button (click)="saveLeaveInfo()" label="Submit" styleClass="p-button-text" *ngIf="displaySaveButton"></p-button>
+  <p-button (click)="updateLeaveInfo()" label="Update" styleClass="p-button-text" *ngIf="displayUpdateButton"></p-button>
+  <p-button (click)="deleteLeaveInfo()" label="Delete" styleClass="p-button-text" *ngIf="displayDeleteButton"></p-button>
 </ng-template>
 </p-dialog>
 </div>
