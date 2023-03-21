@@ -58,7 +58,7 @@ export class LeaveCalendarComponent {
       dayMaxEvents: true,
       select: this.handleDateSelect.bind(this),
       eventClick: this.handleEventClick.bind(this),
-      //eventsSet: this.handleEvents.bind(this),
+     // eventsSet: this.handleEvents.bind(this),
       dateClick: this.handleEventOnDateChange.bind(this),
       eventChange: this.handleEventOnDateChange.bind(this)
       /* you can update a remote database when these fire:
@@ -121,6 +121,9 @@ export class LeaveCalendarComponent {
     this.endDate = this.datepipe.transform(endDateVal, 'yyyy-MM-dd');
     this.description = this.user.displayName;
     this.isAllDay = false;
+    this.displaySaveButton = true;
+    this.displayDeleteButton = false;
+    this.displayUpdateButton = false;
     this.displayResponsive = true;
   }
 
