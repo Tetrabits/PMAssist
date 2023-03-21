@@ -120,7 +120,7 @@ export class LeaveCalendarComponent {
     let endDateVal = selectInfo.end.setDate(selectInfo.end.getDate() - 1);
     this.endDate = this.datepipe.transform(endDateVal, 'yyyy-MM-dd');
     this.description = this.user.displayName;
-    this.isAllDay = selectInfo.allDay;
+    this.isAllDay = false;
     this.displayResponsive = true;
   }
 
@@ -134,6 +134,10 @@ export class LeaveCalendarComponent {
     let endDateVal = clickInfo?.event?.end?.setDate(clickInfo.event.end.getDate() - 1);
     this.endDate = clickInfo.event.extendedProps['source'].endStr;//this.datepipe.transform(clickInfo.event.end, 'yyyy-MM-dd');
     this.description = clickInfo.event.title;
+    this.isAllDay = !clickInfo.event.allDay;
+    this.displaySaveButton = false;
+    this.displayUpdateButton = false;
+    this.displayDeleteButton = true;
     this.displayResponsive = true;
     // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
     //   clickInfo.event.remove();
@@ -164,8 +168,8 @@ export class LeaveCalendarComponent {
     }, 0);
     let nextId = this.createEventId(maxValue);
     this.calenderData.push({
-      allDay: this.isAllDay,
-      allow: null,      
+      allDay: !this.isAllDay,
+      allow: null,
       borderColor: 'blue',
       classNames: null,
       constraint: null,
@@ -192,20 +196,19 @@ export class LeaveCalendarComponent {
         title: this.description,
         start: this.startDate,
         end: this.actualEndDate,
-        allDay: this.isAllDay,
+        allDay: !this.isAllDay,
         extendedProps: { startStr: this.startDate, endStr: this.endDate },
-        source: { id: this.loggedUser, url: null, format: null },
-        backgroundColor: "green"
+        source: { id: this.loggedUser, url: '', format: null, startStr: this.startDate, endStr: this.endDate }
       });
     }
     this.displayResponsive = false;
     console.log(this.loggedUser);
-   
+
     this.calenderService.addEvent({
       UID: this.user.uid,
       Start: this.startDate,
       End: this.endDate,
-      IsHalfDay: this.isAllDay,
+      IsHalfDay: !this.isAllDay,
       AuthToken: this.user.token
     });
   }
@@ -215,10 +218,23 @@ export class LeaveCalendarComponent {
   }
 
   updateLeaveInfo() {
-
+    this.calenderService.addEvent({
+      UID: this.user.uid,
+      Start: this.startDate,
+      End: this.endDate,
+      IsHalfDay: this.isAllDay,
+      AuthToken: this.user.token
+    });
+    this.displayResponsive = false;
   }
 
   deleteLeaveInfo() {
 
+  }
+
+  allDayEvent(event: any) {
+    console.log(event);
+    this.isAllDay = event.checked;
+    this.displayUpdateButton = true;
   }
 }
