@@ -116,7 +116,7 @@ export class LeaveCalendarComponent {
     this.actualEndDate = this.datepipe.transform(selectInfo.end, 'yyyy-MM-dd');
     let endDateVal = selectInfo.end.setDate(selectInfo.end.getDate() - 1);
     this.endDate = this.datepipe.transform(endDateVal, 'yyyy-MM-dd');
-    this.description = this.user.displayName + ' PTO';
+    this.description = this.user.displayName;
     this.isAllDay = selectInfo.allDay;
     this.displayResponsive = true;
   }
@@ -162,8 +162,7 @@ export class LeaveCalendarComponent {
     let nextId = this.createEventId(maxValue);
     this.calenderData.push({
       allDay: this.isAllDay,
-      allow: null,
-      backgroundColor: "green",
+      allow: null,      
       borderColor: 'blue',
       classNames: null,
       constraint: null,
