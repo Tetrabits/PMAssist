@@ -30,6 +30,9 @@ export class LeaveCalendarComponent {
   currentDate: any = new Date().toISOString().replace(/T.*$/, '');
   apiBaseUrl: string = "";
   user: any;
+  displayDeleteButton: boolean = false;
+  displayUpdateButton: boolean = false;
+  displaySaveButton: boolean = true;
 
   constructor(private changeDetector: ChangeDetectorRef, public datepipe: DatePipe,
     private calenderService: CalenderService, private element: ElementRef<any>, @Inject('BASE_URL') baseUrl: string) {
@@ -127,9 +130,9 @@ export class LeaveCalendarComponent {
       return;
     }
     let props = clickInfo.event.extendedProps;
-    this.startDate = clickInfo.event.extendedProps['startStr'];//this.datepipe.transform(clickInfo.event.start, 'yyyy-MM-dd');
+    this.startDate = clickInfo.event.extendedProps['source'].startStr;//this.datepipe.transform(clickInfo.event.start, 'yyyy-MM-dd');
     let endDateVal = clickInfo?.event?.end?.setDate(clickInfo.event.end.getDate() - 1);
-    this.endDate = clickInfo.event.extendedProps['endStr'];//this.datepipe.transform(clickInfo.event.end, 'yyyy-MM-dd');
+    this.endDate = clickInfo.event.extendedProps['source'].endStr;//this.datepipe.transform(clickInfo.event.end, 'yyyy-MM-dd');
     this.description = clickInfo.event.title;
     this.displayResponsive = true;
     // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
@@ -209,5 +212,13 @@ export class LeaveCalendarComponent {
   createEventId(eventGuid: number) {
     let id = eventGuid + 1;
     return String(id);
+  }
+
+  updateLeaveInfo() {
+
+  }
+
+  deleteLeaveInfo() {
+
   }
 }

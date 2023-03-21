@@ -19,10 +19,12 @@
 <div class="field padding-top-dev">
 
 </div>
-     <ng-template pTemplate="footer">
-      <p-button (click)="displayResponsive=false" label="Cancel" styleClass="p-button-text"></p-button>
-      <p-button (click)="saveLeaveInfo()" label="Submit" styleClass="p-button-text"></p-button>
-     </ng-template>
+<ng-template pTemplate="footer">
+  <p-button (click)="displayResponsive=false" label="Cancel" styleClass="p-button-text"></p-button>
+  <p-button (click)="saveLeaveInfo()" label="Submit" styleClass="p-button-text" [(visible)]="displaySaveButton"></p-button>
+  <p-button (click)="updateLeaveInfo()" label="Update" styleClass="p-button-text" [(visible)]="displayUpdateButton"></p-button>
+  <p-button (click)="deleteLeaveInfo()" label="Delete" styleClass="p-button-text" [(visible)]="displayDeleteButton"></p-button>
+</ng-template>
 </p-dialog>
 </div>
 </div>
