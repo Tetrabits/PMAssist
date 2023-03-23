@@ -78,7 +78,7 @@ namespace PMAssist.Managers
             var kvp = $"{{\"PTO\":\"{value}\"}}";
             var data = $"{{\"{id}\":{kvp}}}";
 
-            var utilizeData = await dataAccess.PatchData("asdfasd", url, kvp);
+            var utilizeData = await dataAccess.PatchData(eventApi.AuthToken, url, kvp);
 
         }
     }
