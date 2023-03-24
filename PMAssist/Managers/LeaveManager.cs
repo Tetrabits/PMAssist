@@ -163,6 +163,9 @@ namespace PMAssist.Managers
                             End = new DateTime(year, month, Convert.ToInt32(when.Key)),
                             Title = (await UserManager.GetUser(user.Key)).Name,
                             ID = $"{new DateTime(year, month, Convert.ToInt32(when.Key)).ToString("yyyyMMdd")}|{user.Key}",
+                            source = new EventSourceApi { url = "", id = user.Key,startStr = new DateTime(year, month, Convert.ToInt32(when.Key)).ToString("yyyy-MM-dd"),endStr = new DateTime(year, month, Convert.ToInt32(when.Key)).ToString("yyyy-MM-dd") },
+                            url = "",
+                            allDay = when.Value.FirstOrDefault().Value == "4" ? false : true
                         });
                     }
                 }
@@ -185,8 +188,20 @@ namespace PMAssist.Managers
             var kvp = $"{{\"PTO\":\"{value}\"}}";
             var data = $"{{\"{id}\":{kvp}}}";
 
-            var utilizeData = await dataAccess.PatchData("asdfasd", url, kvp);
+           await dataAccess.PatchData(eventApi.AuthToken, url, kvp);
 
+        }
+
+        public async Task DeleteEvent(LeaveInfo eventApi)
+        {
+            var month = eventApi.Start.Month;
+            var year = eventApi.Start.Year;
+            var date = eventApi.Start.Day;
+
+            var id = eventApi.UID;
+            var url = $"{URL}/{year}/{month}/{id}/{date}/PTO.json";
+
+            await dataAccess.DeleteData(eventApi.AuthToken, url);
         }
     }
 }

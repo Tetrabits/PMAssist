@@ -16,8 +16,8 @@ export class CalenderService {
   constructor(
     private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
-  getCalenderData(currentDate: any, baseUrl: string): Observable<EventInput[]> {
-    return this.http.get<EventInput[]>(baseUrl + 'leaveinformation/?currentDate=' + currentDate)
+  getCalenderData(currentDate: any): Observable<EventInput[]> {
+    return this.http.get<EventInput[]>(this.baseUrl + 'leaveinformation/?currentDate=' + currentDate)
       .pipe(
         tap()
       );
@@ -41,5 +41,9 @@ export class CalenderService {
       .subscribe(result => {
         console.log(result);
       }, error => console.error(error));
+  }
+
+  deleteEvent(event: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'leaveinformation/deleteevent', event);
   }
 }

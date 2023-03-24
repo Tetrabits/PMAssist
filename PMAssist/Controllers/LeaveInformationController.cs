@@ -43,5 +43,14 @@ namespace PMAssist.Controllers
             await leaveManager.AddEvent(eventApi);
             return Ok(eventApi);
         }
+
+        [HttpPost]
+        [Route("deleteevent")]
+        public async Task<IActionResult> DeleteEvent(LeaveInfo eventApi)
+        {
+            var leaveManager = new LeaveManager();
+            await leaveManager.DeleteEvent(eventApi);
+            return Ok(eventApi);
+        }
     }
 }

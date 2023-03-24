@@ -93,7 +93,7 @@ namespace PMAssist
         public async Task<string> DeleteData(string token, string url)
         {
 
-            var patchurl = BaseUrl + url + "/.json?auth=" + token;
+            var patchurl = BaseUrl + url + "?auth=" + token;
             using var client = new HttpClient();
 
             var response = await client.DeleteAsync(patchurl);

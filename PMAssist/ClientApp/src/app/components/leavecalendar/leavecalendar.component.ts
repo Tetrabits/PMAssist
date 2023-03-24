@@ -25,6 +25,10 @@ export class LeaveCalendarComponent {
   calendarApi: any;
   currentDate: any = new Date().toISOString().replace(/T.*$/, '');
   user: any;
+  displayDeleteButton: boolean = false;
+  displayUpdateButton: boolean = false;
+  displaySaveButton: boolean = true;
+
 
   constructor(private calenderService: CalenderService, public datepipe: DatePipe) {
 
@@ -41,7 +45,7 @@ export class LeaveCalendarComponent {
       dayMaxEvents: true,
       select: this.handleDateSelect.bind(this),
       eventClick: this.handleEventClick.bind(this),
-      //eventsSet: this.handleEvents.bind(this),
+      // eventsSet: this.handleEvents.bind(this),
       dateClick: this.handleEventOnDateChange.bind(this),
       eventChange: this.handleEventOnDateChange.bind(this)
       /* you can update a remote database when these fire:
@@ -50,7 +54,7 @@ export class LeaveCalendarComponent {
       eventRemove:
       */
     };
-
+    
     this.calenderService.getLeaves(this.currentDate).
       subscribe((data: EventInput[]) => {
         this.calenderData = data;
@@ -93,7 +97,10 @@ export class LeaveCalendarComponent {
     let endDateVal = selectInfo.end.setDate(selectInfo.end.getDate() - 1);
     this.endDate = this.datepipe.transform(endDateVal, 'yyyy-MM-dd');
     this.description = this.user.displayName;
-    this.isAllDay = selectInfo.allDay;
+    this.isAllDay = false;
+    this.displaySaveButton = true;
+    this.displayDeleteButton = false;
+    this.displayUpdateButton = false;
     this.displayResponsive = true;
   }
 
@@ -103,11 +110,35 @@ export class LeaveCalendarComponent {
       return;
     }
     let props = clickInfo.event.extendedProps;
-    this.startDate = clickInfo.event.extendedProps['startStr'];//this.datepipe.transform(clickInfo.event.start, 'yyyy-MM-dd');
+    this.startDate = clickInfo.event.extendedProps['source'].startStr;//this.datepipe.transform(clickInfo.event.start, 'yyyy-MM-dd');
     let endDateVal = clickInfo?.event?.end?.setDate(clickInfo.event.end.getDate() - 1);
-    this.endDate = clickInfo.event.extendedProps['endStr'];//this.datepipe.transform(clickInfo.event.end, 'yyyy-MM-dd');
+    this.endDate = clickInfo.event.extendedProps['source'].endStr;//this.datepipe.transform(clickInfo.event.end, 'yyyy-MM-dd');
     this.description = clickInfo.event.title;
+    this.isAllDay = !clickInfo.event.allDay;
+    this.displaySaveButton = false;
+    this.displayUpdateButton = false;
+    this.displayDeleteButton = true;
     this.displayResponsive = true;
+    // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+    //   clickInfo.event.remove();
+    // }
+  }
+
+  handleEvents(events: EventApi[]) {
+    const calendarApi = this.calendarComponent?.getApi();
+    if (calendarApi && calendarApi.view.type === 'dayGridMonth') {
+      const selectedDate = calendarApi?.getDate();
+      this.currentDate = this.datepipe.transform(selectedDate, 'yyyy-MM-dd');
+      console.log(this.currentDate);
+      this.calenderService.getCalenderData(this.currentDate).
+        subscribe((data: EventInput[]) => {
+          this.calenderData = data;
+          this.calendarOptions.events = this.calenderData;
+        });
+    }
+
+    this.currentEvents = events;
+    this.changeDetector.detectChanges();
   }
 
   saveLeaveInfo() {
@@ -116,7 +147,7 @@ export class LeaveCalendarComponent {
     }, 0);
     let nextId = this.createEventId(maxValue);
     this.calenderData.push({
-      allDay: this.isAllDay,
+      allDay: !this.isAllDay,
       allow: null,
       borderColor: 'blue',
       classNames: null,
@@ -144,10 +175,9 @@ export class LeaveCalendarComponent {
         title: this.description,
         start: this.startDate,
         end: this.actualEndDate,
-        allDay: this.isAllDay,
+        allDay: !this.isAllDay,
         extendedProps: { startStr: this.startDate, endStr: this.endDate },
-        source: { id: this.loggedUser, url: null, format: null },
-        backgroundColor: "green"
+        source: { id: this.loggedUser, url: '', format: null, startStr: this.startDate, endStr: this.endDate }
       });
     }
     this.displayResponsive = false;
@@ -156,12 +186,47 @@ export class LeaveCalendarComponent {
       UID: this.user.uid,
       Start: this.startDate,
       End: this.endDate,
-      IsHalfDay: this.isAllDay,
+      IsHalfDay: !this.isAllDay,
       AuthToken: this.user.token
     });
   }
   createEventId(eventGuid: number) {
     let id = eventGuid + 1;
     return String(id);
+  }
+
+  updateLeaveInfo() {
+    this.calenderService.addEvent({
+      UID: this.user.uid,
+      Start: this.startDate,
+      End: this.endDate,
+      IsHalfDay: this.isAllDay,
+      AuthToken: this.user.token
+    });
+    this.displayResponsive = false;
+  }
+
+  deleteLeaveInfo() {
+    let response = this.calenderService.deleteEvent({
+      UID: this.user.uid,
+      Start: this.startDate,
+      End: this.endDate,
+      IsHalfDay: this.isAllDay,
+      AuthToken: this.user.token,
+      CurrentDate: this.currentDate
+    }).subscribe(result => {
+      this.calenderData = this.calenderData;
+      this.calendarOptions.events = this.calenderData;
+      console.log(result);
+    }, error => console.error(error));
+    this.displayResponsive = false;
+  }
+
+  allDayEvent(event: any) {
+    console.log(event);
+    if (!this.displaySaveButton) {
+      this.isAllDay = event.checked;
+      this.displayUpdateButton = true;
+    }
   }
 }
