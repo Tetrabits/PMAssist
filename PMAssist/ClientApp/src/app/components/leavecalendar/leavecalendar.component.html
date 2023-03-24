@@ -1,13 +1,14 @@
  <div>
-    <full-calendar #calendar *ngIf='calendarVisible' [options]='calendarOptions'>
-      <ng-template #eventContent let-arg>        
-        <i>{{ arg.event.title }}</i>
-      </ng-template>
-    </full-calendar>
-  </div>
+  <full-calendar [options]="calendarOptions"></full-calendar>
+  <!--<full-calendar #calendar *ngIf='calendarVisible' [options]='calendarOptions'>
+    <ng-template #eventContent let-arg>
+      <i>{{ arg.event.title }}</i>
+    </ng-template>
+  </full-calendar>-->
+</div>
 <div class="content-section implementation">
   <div class="card">
-<p-dialog header="Leave Information" [(visible)]="displayResponsive" [breakpoints]="{'960px': '75vw'}" [style]="{width: '58vw'}" [draggable]="true" [resizable]="true">
+<!--<p-dialog header="Leave Information" [(visible)]="displayResponsive" [breakpoints]="{'960px': '75vw'}" [style]="{width: '58vw'}" [draggable]="true" [resizable]="true">
   <div class="field">
     <label for="txtStartDate" class="block padding-dev">Start Date:</label>
     <input id="txtStartDate" type="text" pInputText [(ngModel)]="startDate" placeholder="Start Date" class="padding-dev" [disabled]="disabled" />
@@ -23,6 +24,6 @@
       <p-button (click)="displayResponsive=false" label="Cancel" styleClass="p-button-text"></p-button>
       <p-button (click)="saveLeaveInfo()" label="Submit" styleClass="p-button-text"></p-button>
      </ng-template>
-</p-dialog>
+</p-dialog>-->
 </div>
 </div>

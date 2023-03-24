@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PMAssist\PMAssist.csproj" />
+  </ItemGroup>
+
 </Project>

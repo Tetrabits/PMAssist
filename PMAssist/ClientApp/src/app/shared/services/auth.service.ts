@@ -13,7 +13,6 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   userData: User = { uid: '', email: '', displayName: '', photoURL: '', emailVerified: false, token: '' };
-  ; // Save logged in user data
   public loggedIn: boolean = false;
 
   constructor(
