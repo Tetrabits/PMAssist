@@ -9,7 +9,8 @@ const PROXY_CONFIG = [
       "/weatherforecast",
       "/authorize",
       "/leaveinformation",
-      "/leaveinformation/addevent"
+      "/leaveinformation/addevent",
+      "/leaveinformation/deleteevent"
    ],
     target: target,
     secure: false,
