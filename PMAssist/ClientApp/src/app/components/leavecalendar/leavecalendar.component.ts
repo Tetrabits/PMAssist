@@ -34,6 +34,7 @@ export class LeaveCalendarComponent {
   displayUpdateButton: boolean = false;
   displaySaveButton: boolean = true;
 
+
   constructor(private changeDetector: ChangeDetectorRef, public datepipe: DatePipe,
     private calenderService: CalenderService, private element: ElementRef<any>, @Inject('BASE_URL') baseUrl: string) {
     this.apiBaseUrl = baseUrl;
@@ -237,13 +238,11 @@ export class LeaveCalendarComponent {
       Start: this.startDate,
       End: this.endDate,
       IsHalfDay: this.isAllDay,
-      AuthToken: this.user.token
+      AuthToken: this.user.token,
+      CurrentDate: this.currentDate
     }).subscribe(result => {
-      this.calenderService.getCalenderData(this.currentDate).
-        subscribe((data: EventInput[]) => {
-          this.calenderData = data;
-          this.calendarOptions.events = this.calenderData;
-        });
+      this.calenderData = this.calenderData;
+      this.calendarOptions.events = this.calenderData;
       console.log(result);
     }, error => console.error(error));
     this.displayResponsive = false;
