@@ -1,10 +1,6 @@
-import { Component, ChangeDetectorRef, ViewChild, ElementRef, Inject } from '@angular/core';
-import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, EventInput, Calendar, EventDropArg } from '@fullcalendar/core';
-import interactionPlugin from '@fullcalendar/interaction';
-import { FullCalendarComponent } from "@fullcalendar/angular";
+import { Component } from '@angular/core';
+import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, EventInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import listPlugin from '@fullcalendar/list';
 import { DatePipe } from '@angular/common'
 import { CalenderService } from '../../shared/services/calender.service';
 
@@ -14,7 +10,7 @@ import { CalenderService } from '../../shared/services/calender.service';
   styleUrls: ['./leavecalendar.component.css']
 })
 export class LeaveCalendarComponent {
-  @ViewChild('calendar') calendarComponent: FullCalendarComponent = new FullCalendarComponent(this.element, this.changeDetector); // the
+
   calenderData: any[] = [];
   loggedUser: any;
   calendarVisible = true;
@@ -28,24 +24,14 @@ export class LeaveCalendarComponent {
   calendarOptions: CalendarOptions = {};
   calendarApi: any;
   currentDate: any = new Date().toISOString().replace(/T.*$/, '');
-  apiBaseUrl: string = "";
   user: any;
 
-  constructor(private changeDetector: ChangeDetectorRef, public datepipe: DatePipe,
-    private calenderService: CalenderService, private element: ElementRef<any>, @Inject('BASE_URL') baseUrl: string) {
-    this.apiBaseUrl = baseUrl;
+  constructor(private calenderService: CalenderService, public datepipe: DatePipe) {
+
     this.calendarOptions = {
       plugins: [
-        interactionPlugin,
         dayGridPlugin,
-        timeGridPlugin,
-        listPlugin,
       ],
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-      },
       initialView: 'dayGridMonth',
       initialEvents: this.calenderData, //INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
       weekends: true,
@@ -64,32 +50,22 @@ export class LeaveCalendarComponent {
       eventRemove:
       */
     };
-    this.calenderService.getCalenderData(this.currentDate, baseUrl).
+
+    this.calenderService.getLeaves(this.currentDate).
       subscribe((data: EventInput[]) => {
         this.calenderData = data;
         this.calendarOptions.events = this.calenderData;
       });
 
     this.user = JSON.parse(localStorage.getItem('user')!);
-    console.log(this.user);
-  }
 
+  }
 
   ngOnInit() {
     this.loggedUser = this.user.uid;
-    console.log(this.currentEvents);
   }
-
 
   currentEvents: EventApi[] = [];
-
-  ngAfterViewInit() {
-
-  }
-  handleDatesRender($event: any) {
-    console.log($event);
-  }
-
 
 
   handleCalendarToggle() {
@@ -101,7 +77,7 @@ export class LeaveCalendarComponent {
   }
 
   handleEventOnDateChange(eventDropInfo: any) {
-    console.log(eventDropInfo);
+
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
@@ -132,37 +108,16 @@ export class LeaveCalendarComponent {
     this.endDate = clickInfo.event.extendedProps['endStr'];//this.datepipe.transform(clickInfo.event.end, 'yyyy-MM-dd');
     this.description = clickInfo.event.title;
     this.displayResponsive = true;
-    // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    //   clickInfo.event.remove();
-    // }
-  }
-
-  handleEvents(events: EventApi[]) {
-    const calendarApi = this.calendarComponent?.getApi();
-    if (calendarApi && calendarApi.view.type === 'dayGridMonth') {
-      const selectedDate = calendarApi?.getDate();
-      this.currentDate = this.datepipe.transform(selectedDate, 'yyyy-MM-dd');
-      console.log(this.currentDate);
-      this.calenderService.getCalenderData(this.currentDate, this.apiBaseUrl).
-        subscribe((data: EventInput[]) => {
-          this.calenderData = data;
-          this.calendarOptions.events = this.calenderData;
-        });
-    }
-
-    this.currentEvents = events;
-    this.changeDetector.detectChanges();
   }
 
   saveLeaveInfo() {
-    console.log("save event");
     let maxValue = this.calenderData.reduce((acc, value) => {
       return (acc = acc > Number(value.id) ? acc : Number(value.id));
     }, 0);
     let nextId = this.createEventId(maxValue);
     this.calenderData.push({
       allDay: this.isAllDay,
-      allow: null,      
+      allow: null,
       borderColor: 'blue',
       classNames: null,
       constraint: null,
@@ -196,8 +151,7 @@ export class LeaveCalendarComponent {
       });
     }
     this.displayResponsive = false;
-    console.log(this.loggedUser);
-   
+
     this.calenderService.addEvent({
       UID: this.user.uid,
       Start: this.startDate,
