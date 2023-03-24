@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, EventInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+
 import { DatePipe } from '@angular/common'
 import { CalenderService } from '../../shared/services/calender.service';
 
@@ -35,6 +37,7 @@ export class LeaveCalendarComponent {
     this.calendarOptions = {
       plugins: [
         dayGridPlugin,
+        interactionPlugin
       ],
       initialView: 'dayGridMonth',
       initialEvents: this.calenderData, //INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
@@ -105,14 +108,13 @@ export class LeaveCalendarComponent {
   }
 
   handleEventClick(clickInfo: EventClickArg) {
-    let eventUser = clickInfo.event.extendedProps['source'].id;
+    let eventUser = clickInfo.event.id.split('|')[1];
     if (this.loggedUser !== eventUser) {
       return;
     }
-    let props = clickInfo.event.extendedProps;
-    this.startDate = clickInfo.event.extendedProps['source'].startStr;//this.datepipe.transform(clickInfo.event.start, 'yyyy-MM-dd');
-    let endDateVal = clickInfo?.event?.end?.setDate(clickInfo.event.end.getDate() - 1);
-    this.endDate = clickInfo.event.extendedProps['source'].endStr;//this.datepipe.transform(clickInfo.event.end, 'yyyy-MM-dd');
+
+    this.startDate = clickInfo.event.startStr;
+    this.endDate = clickInfo.event.endStr;
     this.description = clickInfo.event.title;
     this.isAllDay = !clickInfo.event.allDay;
     this.displaySaveButton = false;
@@ -124,22 +126,22 @@ export class LeaveCalendarComponent {
     // }
   }
 
-  handleEvents(events: EventApi[]) {
-    const calendarApi = this.calendarComponent?.getApi();
-    if (calendarApi && calendarApi.view.type === 'dayGridMonth') {
-      const selectedDate = calendarApi?.getDate();
-      this.currentDate = this.datepipe.transform(selectedDate, 'yyyy-MM-dd');
-      console.log(this.currentDate);
-      this.calenderService.getCalenderData(this.currentDate).
-        subscribe((data: EventInput[]) => {
-          this.calenderData = data;
-          this.calendarOptions.events = this.calenderData;
-        });
-    }
+  //handleEvents(events: EventApi[]) {
+  //  const calendarApi = this.calendarComponent?.getApi();
+  //  if (calendarApi && calendarApi.view.type === 'dayGridMonth') {
+  //    const selectedDate = calendarApi?.getDate();
+  //    this.currentDate = this.datepipe.transform(selectedDate, 'yyyy-MM-dd');
+  //    console.log(this.currentDate);
+  //    this.calenderService.getCalenderData(this.currentDate).
+  //      subscribe((data: EventInput[]) => {
+  //        this.calenderData = data;
+  //        this.calendarOptions.events = this.calenderData;
+  //      });
+  //  }
 
-    this.currentEvents = events;
-    this.changeDetector.detectChanges();
-  }
+  //  this.currentEvents = events;
+  //  this.changeDetector.detectChanges();
+  //}
 
   saveLeaveInfo() {
     let maxValue = this.calenderData.reduce((acc, value) => {

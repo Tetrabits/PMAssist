@@ -163,9 +163,9 @@ namespace PMAssist.Managers
                             End = new DateTime(year, month, Convert.ToInt32(when.Key)),
                             Title = (await UserManager.GetUser(user.Key)).Name,
                             ID = $"{new DateTime(year, month, Convert.ToInt32(when.Key)).ToString("yyyyMMdd")}|{user.Key}",
-                            source = new EventSourceApi { url = "", id = user.Key,startStr = new DateTime(year, month, Convert.ToInt32(when.Key)).ToString("yyyy-MM-dd"),endStr = new DateTime(year, month, Convert.ToInt32(when.Key)).ToString("yyyy-MM-dd") },
-                            url = "",
-                            allDay = when.Value.FirstOrDefault().Value == "4" ? false : true
+                            //source = new EventSourceApi { url = "", id = user.Key,startStr = new DateTime(year, month, Convert.ToInt32(when.Key)).ToString("yyyy-MM-dd"),endStr = new DateTime(year, month, Convert.ToInt32(when.Key)).ToString("yyyy-MM-dd") },
+                            //url = "",
+                            //allDay = when.Value.FirstOrDefault().Value == "4" ? false : true
                         });
                     }
                 }
