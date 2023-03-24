@@ -10,7 +10,8 @@ const PROXY_CONFIG = [
       "/authorize",
       "/leaveinformation",
       "/leaveinformation/addevent",
-      "/leaveinformation/deleteevent"
+      "/leaveinformation/deleteevent",
+      "/leaveinformation/getleaves"
    ],
     target: target,
     secure: false,
