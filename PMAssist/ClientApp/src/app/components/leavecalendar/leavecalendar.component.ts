@@ -58,7 +58,7 @@ export class LeaveCalendarComponent {
       dayMaxEvents: true,
       select: this.handleDateSelect.bind(this),
       eventClick: this.handleEventClick.bind(this),
-     // eventsSet: this.handleEvents.bind(this),
+      // eventsSet: this.handleEvents.bind(this),
       dateClick: this.handleEventOnDateChange.bind(this),
       eventChange: this.handleEventOnDateChange.bind(this)
       /* you can update a remote database when these fire:
@@ -67,7 +67,7 @@ export class LeaveCalendarComponent {
       eventRemove:
       */
     };
-    this.calenderService.getCalenderData(this.currentDate, baseUrl).
+    this.calenderService.getCalenderData(this.currentDate).
       subscribe((data: EventInput[]) => {
         this.calenderData = data;
         this.calendarOptions.events = this.calenderData;
@@ -153,7 +153,7 @@ export class LeaveCalendarComponent {
       const selectedDate = calendarApi?.getDate();
       this.currentDate = this.datepipe.transform(selectedDate, 'yyyy-MM-dd');
       console.log(this.currentDate);
-      this.calenderService.getCalenderData(this.currentDate, this.apiBaseUrl).
+      this.calenderService.getCalenderData(this.currentDate).
         subscribe((data: EventInput[]) => {
           this.calenderData = data;
           this.calendarOptions.events = this.calenderData;
@@ -232,12 +232,28 @@ export class LeaveCalendarComponent {
   }
 
   deleteLeaveInfo() {
-
+    let response = this.calenderService.deleteEvent({
+      UID: this.user.uid,
+      Start: this.startDate,
+      End: this.endDate,
+      IsHalfDay: this.isAllDay,
+      AuthToken: this.user.token
+    }).subscribe(result => {
+      this.calenderService.getCalenderData(this.currentDate).
+        subscribe((data: EventInput[]) => {
+          this.calenderData = data;
+          this.calendarOptions.events = this.calenderData;
+        });
+      console.log(result);
+    }, error => console.error(error));
+    this.displayResponsive = false;
   }
 
   allDayEvent(event: any) {
     console.log(event);
-    this.isAllDay = event.checked;
-    this.displayUpdateButton = true;
+    if (!this.displaySaveButton) {
+      this.isAllDay = event.checked;
+      this.displayUpdateButton = true;
+    }
   }
 }
