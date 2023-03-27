@@ -113,8 +113,11 @@ export class LeaveCalendarComponent {
       return;
     }
 
-    this.startDate = clickInfo.event.startStr;
-    this.endDate = clickInfo.event.endStr;
+    this.startDate = this.datepipe.transform(clickInfo.event.start, 'yyyy-MM-dd');
+    this.actualEndDate = this.datepipe.transform(clickInfo.event.end, 'yyyy-MM-dd');
+    let endDateVal = clickInfo?.event?.end?.setDate(clickInfo?.event?.end?.getDate() - 1);
+    this.endDate = this.datepipe.transform(endDateVal, 'yyyy-MM-dd');
+
     this.description = clickInfo.event.title;
     this.isAllDay = !clickInfo.event.allDay;
     this.displaySaveButton = false;

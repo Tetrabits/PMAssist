@@ -81,7 +81,7 @@ namespace PMAssist.Managers
                         {
                             if (leave != null)
                             {
-                                leave.End = new DateTime(date1.Year, date1.Month, date1.Day,23, 59,59);
+                                leave.End = new DateTime(date1.Year, date1.Month, date1.Day, 23, 59, 59).AddSeconds(1);
                             }
                             currentDate = date1;
                         }
@@ -89,7 +89,7 @@ namespace PMAssist.Managers
                         {
                             if (leave != null)
                             {
-                                leave.End = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59);
+                                leave.End = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59).AddSeconds(1);
                                 final.Add(leave);
                             }
 
@@ -111,7 +111,7 @@ namespace PMAssist.Managers
                         //Person has changed, Add the leave info and then create a Leave Object
                         if (leave != null)
                         {
-                            leave.End = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59);
+                            leave.End = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59).AddSeconds(1);
                             final.Add(leave);
                         }
 
@@ -165,7 +165,7 @@ namespace PMAssist.Managers
                             ID = $"{new DateTime(year, month, Convert.ToInt32(when.Key)).ToString("yyyyMMdd")}|{user.Key}",
                             //source = new EventSourceApi { url = "", id = user.Key,startStr = new DateTime(year, month, Convert.ToInt32(when.Key)).ToString("yyyy-MM-dd"),endStr = new DateTime(year, month, Convert.ToInt32(when.Key)).ToString("yyyy-MM-dd") },
                             //url = "",
-                            //allDay = when.Value.FirstOrDefault().Value == "4" ? false : true
+                            //AllDay = when.Value.FirstOrDefault().Value == "4" ? false : true
                         });
                     }
                 }
