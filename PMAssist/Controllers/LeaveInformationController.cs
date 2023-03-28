@@ -41,7 +41,7 @@ namespace PMAssist.Controllers
         {
             var leaveManager = new LeaveManager();
             await leaveManager.AddEvent(eventApi);
-            return Ok(eventApi);
+            return Ok();
         }
 
         [HttpPost]
@@ -50,7 +50,7 @@ namespace PMAssist.Controllers
         {
             var leaveManager = new LeaveManager();
             await leaveManager.DeleteEvent(eventApi);
-            return Ok(eventApi);
+            return Ok();
         }
     }
 }

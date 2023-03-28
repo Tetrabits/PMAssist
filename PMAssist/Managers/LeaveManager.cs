@@ -81,7 +81,7 @@ namespace PMAssist.Managers
                         {
                             if (leave != null)
                             {
-                                leave.End = new DateTime(date1.Year, date1.Month, date1.Day,23, 59,59);
+                                leave.End = new DateTime(date1.Year, date1.Month, date1.Day, 23, 59, 59);
                             }
                             currentDate = date1;
                         }
@@ -96,7 +96,6 @@ namespace PMAssist.Managers
                             leave = new EventApi
                             {
                                 ID = item.ID,
-                                AllDay = item.AllDay,
                                 Title = item.Title,
                                 Start = item.Start,
                                 End = item.End
@@ -118,7 +117,6 @@ namespace PMAssist.Managers
                         leave = new EventApi
                         {
                             ID = item.ID,
-                            AllDay = item.AllDay,
                             Title = item.Title,
                             Start = item.Start,
                             End = item.End
@@ -141,6 +139,11 @@ namespace PMAssist.Managers
             var url = $"{URL}/{year}/{month}";
 
             var utilizeData = await dataAccess.GetAll(leaveRequestModel.AuthToken, url);
+
+            if (string.IsNullOrWhiteSpace(utilizeData))
+            {
+                return new List<EventApi>();
+            }
 
             var rawData = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(utilizeData);
 
@@ -165,7 +168,7 @@ namespace PMAssist.Managers
                             ID = $"{new DateTime(year, month, Convert.ToInt32(when.Key)).ToString("yyyyMMdd")}|{user.Key}",
                             //source = new EventSourceApi { url = "", id = user.Key,startStr = new DateTime(year, month, Convert.ToInt32(when.Key)).ToString("yyyy-MM-dd"),endStr = new DateTime(year, month, Convert.ToInt32(when.Key)).ToString("yyyy-MM-dd") },
                             //url = "",
-                            //allDay = when.Value.FirstOrDefault().Value == "4" ? false : true
+                            //AllDay = when.Value.FirstOrDefault().Value == "4" ? false : true
                         });
                     }
                 }
@@ -188,7 +191,7 @@ namespace PMAssist.Managers
             var kvp = $"{{\"PTO\":\"{value}\"}}";
             var data = $"{{\"{id}\":{kvp}}}";
 
-           await dataAccess.PatchData(eventApi.AuthToken, url, kvp);
+            await dataAccess.PatchData(eventApi.AuthToken, url, kvp);
 
         }
 
