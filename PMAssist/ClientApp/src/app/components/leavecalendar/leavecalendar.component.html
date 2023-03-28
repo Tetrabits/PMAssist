@@ -2,12 +2,12 @@
 <full-calendar [options]="calendarOptions"></full-calendar>
 <div class="content-section implementation">
   <div class="card">
-    <p-dialog header="Leave Information" [(visible)]="displayResponsive" [breakpoints]="{'960px': '75vw'}" [style]="{width: '58vw'}" [draggable]="true" [resizable]="true">
+    <p-dialog header="Leave Information" [(visible)]="displayDailog" [breakpoints]="{'960px': '75vw'}" [style]="{width: '58vw'}" [draggable]="true" [resizable]="true">
       <div class="field">
         <label for="txtStartDate" class="block padding-dev">Start Date:</label>
-        <input id="txtStartDate" type="text" pInputText [(ngModel)]="startDate" placeholder="Start Date" class="padding-dev" [disabled]="disabled" />
+        <input id="txtStartDate" type="text" pInputText [(ngModel)]="startDate" placeholder="Start Date" class="padding-dev" [disabled]="txtBoxDisabled" />
         <label for="txtEndDate" class="block padding-dev">End Date:</label>
-        <input id="txtEndDate" type="text" pInputText [(ngModel)]="endDate" placeholder="End Date" class="padding-dev" [disabled]="disabled" />
+        <input id="txtEndDate" type="text" pInputText [(ngModel)]="endDate" placeholder="End Date" class="padding-dev" [disabled]="txtBoxDisabled" />
         <p-checkbox [(ngModel)]="isAllDay" [binary]="true" inputId="binary" class="padding-dev" (onChange)="allDayEvent($event)">Half Day</p-checkbox>
         <label for="binary">Half Day</label>
       </div>
@@ -15,7 +15,7 @@
 
       </div>
       <ng-template pTemplate="footer">
-        <p-button (click)="displayResponsive=false" label="Cancel" styleClass="p-button-text"></p-button>
+        <p-button (click)="displayDailog=false" label="Cancel" styleClass="p-button-text"></p-button>
         <p-button (click)="saveLeaveInfo()" label="Submit" styleClass="p-button-text" *ngIf="displaySaveButton"></p-button>
         <p-button (click)="updateLeaveInfo()" label="Update" styleClass="p-button-text" *ngIf="displayUpdateButton"></p-button>
         <p-button (click)="deleteLeaveInfo()" label="Delete" styleClass="p-button-text" *ngIf="displayDeleteButton"></p-button>

@@ -36,11 +36,8 @@ export class CalenderService {
       .pipe(tap());
   }
 
-  addEvent(event: any): void {
-    this.http.post<any>(this.baseUrl + 'leaveinformation/addevent', event)
-      .subscribe(result => {
-        console.log(result);
-      }, error => console.error(error));
+  addEvent(event: any): Observable<void> {
+    return this.http.post<any>(this.baseUrl + 'leaveinformation/addevent', event);
   }
 
   deleteEvent(event: any): Observable<any> {

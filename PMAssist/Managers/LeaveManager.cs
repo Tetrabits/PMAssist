@@ -81,7 +81,7 @@ namespace PMAssist.Managers
                         {
                             if (leave != null)
                             {
-                                leave.End = new DateTime(date1.Year, date1.Month, date1.Day, 23, 59, 59).AddSeconds(1);
+                                leave.End = new DateTime(date1.Year, date1.Month, date1.Day, 23, 59, 59);
                             }
                             currentDate = date1;
                         }
@@ -89,14 +89,13 @@ namespace PMAssist.Managers
                         {
                             if (leave != null)
                             {
-                                leave.End = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59).AddSeconds(1);
+                                leave.End = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59);
                                 final.Add(leave);
                             }
 
                             leave = new EventApi
                             {
                                 ID = item.ID,
-                                AllDay = item.AllDay,
                                 Title = item.Title,
                                 Start = item.Start,
                                 End = item.End
@@ -111,14 +110,13 @@ namespace PMAssist.Managers
                         //Person has changed, Add the leave info and then create a Leave Object
                         if (leave != null)
                         {
-                            leave.End = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59).AddSeconds(1);
+                            leave.End = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59);
                             final.Add(leave);
                         }
 
                         leave = new EventApi
                         {
                             ID = item.ID,
-                            AllDay = item.AllDay,
                             Title = item.Title,
                             Start = item.Start,
                             End = item.End
@@ -141,6 +139,11 @@ namespace PMAssist.Managers
             var url = $"{URL}/{year}/{month}";
 
             var utilizeData = await dataAccess.GetAll(leaveRequestModel.AuthToken, url);
+
+            if (string.IsNullOrWhiteSpace(utilizeData))
+            {
+                return new List<EventApi>();
+            }
 
             var rawData = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(utilizeData);
 
@@ -188,7 +191,7 @@ namespace PMAssist.Managers
             var kvp = $"{{\"PTO\":\"{value}\"}}";
             var data = $"{{\"{id}\":{kvp}}}";
 
-           await dataAccess.PatchData(eventApi.AuthToken, url, kvp);
+            await dataAccess.PatchData(eventApi.AuthToken, url, kvp);
 
         }
 
