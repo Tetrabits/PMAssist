@@ -1,4 +1,5 @@
-﻿using PMAssist.Interfaces;
+﻿using PMAssist.Helpers;
+using PMAssist.Interfaces;
 using PMAssist.Models;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
@@ -8,7 +9,6 @@ namespace PMAssist.Managers
     public class LeaveManager
     {
         private static IDataAccessRepository dataAccess;
-        private static readonly string URL = @"utilize";
         public LeaveManager(IDataAccessRepository dataAccessRepository)
         {
             dataAccess = dataAccessRepository;
@@ -126,7 +126,7 @@ namespace PMAssist.Managers
                         currentDate = item.Start ?? DateTime.MinValue;
                     }
                 }
-
+              
                 return final;
             });
 
@@ -136,7 +136,7 @@ namespace PMAssist.Managers
         {
             var month = leaveRequestModel.Date.Month;
             var year = leaveRequestModel.Date.Year;
-            var url = $"{URL}/{year}/{month}";
+            var url = $"{UrlHelper.Utilize.MonthUrl(leaveRequestModel.Date)}";
 
             var utilizeData = await dataAccess.GetAll(leaveRequestModel.AuthToken, url);
 
@@ -179,12 +179,8 @@ namespace PMAssist.Managers
 
         public async Task AddEvent(LeaveInfo eventApi)
         {
-            var month = eventApi.Start.Month;
-            var year = eventApi.Start.Year;
-            var date = eventApi.Start.Day;
-
             var id = eventApi.UID;
-            var url = $"{URL}/{year}/{month}/{id}/{date}.json";
+            var url = $"{UrlHelper.Utilize.DayUrl(eventApi.Start, id)}.json";
 
 
             var value = eventApi.IsHalfDay ? "4" : "8";
@@ -197,12 +193,8 @@ namespace PMAssist.Managers
 
         public async Task DeleteEvent(LeaveInfo eventApi)
         {
-            var month = eventApi.Start.Month;
-            var year = eventApi.Start.Year;
-            var date = eventApi.Start.Day;
-
             var id = eventApi.UID;
-            var url = $"{URL}/{year}/{month}/{id}/{date}/PTO.json";
+            var url = $"{UrlHelper.Utilize.PtoUrl(eventApi.Start, id)}.json";
 
             await dataAccess.DeleteData(eventApi.AuthToken, url);
         }
