@@ -42,7 +42,10 @@ export class LeaveCalendarComponent {
       selectMirror: true,
       dayMaxEvents: true,
       select: this.handleDateSelect.bind(this),
-      eventClick: this.handleEventClick.bind(this)
+      eventClick: this.handleEventClick.bind(this),
+      eventClassNames: 'p-button-secondary',
+      allDayClassNames: 'p-button-secondary',
+      dayCellClassNames: 'p-button-secondary',
     };
 
     this.calenderService.getLeaves(this.currentDate).
@@ -59,7 +62,7 @@ export class LeaveCalendarComponent {
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
-     var calendarApi = selectInfo.view.calendar;
+    var calendarApi = selectInfo.view.calendar;
 
     calendarApi.unselect(); // clear date selection
 
@@ -72,7 +75,8 @@ export class LeaveCalendarComponent {
     this.displaySaveButton = true;
     this.displayDeleteButton = false;
     this.displayUpdateButton = false;
-    this.displayDailog = true;
+    this.saveLeaveInfo();
+    //this.displayDailog = true;
   }
 
   handleEventClick(clickInfo: EventClickArg) {
@@ -149,6 +153,19 @@ export class LeaveCalendarComponent {
     if (!this.displaySaveButton) {
       this.isAllDay = event.checked;
       this.displayUpdateButton = true;
+    }
+  }
+
+  delete() {
+    console.log("test");
+  }
+
+  show(arg: any): boolean {
+
+    if (arg.id.split('|')[1] === this.loggedUser) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

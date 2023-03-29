@@ -1,5 +1,14 @@
 
-<full-calendar [options]="calendarOptions"></full-calendar>
+<full-calendar [options]="calendarOptions">
+  <ng-template #eventContent let-arg>
+    <div class="flex flex-row-reverse bg-primary border-round-sm">
+      <div class="flex  align-items-center justify-content-center ml-1 mr-1">
+        <i *ngIf="show(arg.event)" class="pi pi-trash ml-1 mr-1 text-danger" (click)="delete()"></i>
+      </div>
+      <div class="flex flex-grow-1 align-items-center justify-content-center">{{ arg.event.title }}</div>
+    </div>
+    </ng-template>
+</full-calendar>
 <div class="content-section implementation">
   <div class="card">
     <p-dialog header="Leave Information" [(visible)]="displayDailog" [breakpoints]="{'960px': '75vw'}" [style]="{width: '58vw'}" [draggable]="true" [resizable]="true">
