@@ -161,6 +161,8 @@ export class LeaveCalendarComponent {
     if (confirm("Are you sure to delete ")) {
       this.deleteLeaveInfo();
     }
+    console.log("test");
+    console.log("sfsadf");
   }
 
   show(arg: any): boolean {
