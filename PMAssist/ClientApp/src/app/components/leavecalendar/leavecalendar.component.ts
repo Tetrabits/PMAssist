@@ -75,8 +75,9 @@ export class LeaveCalendarComponent {
     this.displaySaveButton = true;
     this.displayDeleteButton = false;
     this.displayUpdateButton = false;
+    this.displayDailog = false;
+
     this.saveLeaveInfo();
-    //this.displayDailog = true;
   }
 
   handleEventClick(clickInfo: EventClickArg) {
