@@ -93,7 +93,7 @@ export class LeaveCalendarComponent {
     this.displaySaveButton = false;
     this.displayUpdateButton = false;
     this.displayDeleteButton = true;
-    this.displayDailog = true;
+    this.displayDailog = false;
   }
 
   getLeavesInformation() {
@@ -158,7 +158,9 @@ export class LeaveCalendarComponent {
   }
 
   delete() {
-    console.log("test");
+    if (confirm("Are you sure to delete ")) {
+      this.deleteLeaveInfo();
+    }
   }
 
   show(arg: any): boolean {
