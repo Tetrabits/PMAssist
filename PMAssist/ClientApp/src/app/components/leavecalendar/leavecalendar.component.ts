@@ -135,18 +135,25 @@ export class LeaveCalendarComponent {
     });
   }
 
-  deleteLeaveInfo() {
-    this.calenderService.deleteEvent({
-      UID: this.user.uid,
-      Start: this.startDate,
-      End: this.endDate,
-      IsHalfDay: this.isAllDay,
-      AuthToken: this.user.token,
-      CurrentDate: this.currentDate
-    }).subscribe({
-      next: this.getLeavesInformation.bind(this),
-      error: this.handleErrors.bind(this)
-    });
+  deleteLeaveInfo(event : any) {
+    if (confirm("Are you sure to delete ")) {
+      this.startDate = this.datepipe.transform(event.start, 'yyyy-MM-dd');
+      this.actualEndDate = this.datepipe.transform(event.end, 'yyyy-MM-dd');
+      this.endDate = this.actualEndDate;
+      this.description = event.title;
+      this.endDate = this.startDate;
+      this.calenderService.deleteEvent({
+        UID: this.user.uid,
+        Start: this.startDate,
+        End: this.endDate,
+        IsHalfDay: this.isAllDay,
+        AuthToken: this.user.token,
+        CurrentDate: this.currentDate
+      }).subscribe({
+        next: this.getLeavesInformation.bind(this),
+        error: this.handleErrors.bind(this)
+      });
+    }
   }
 
   allDayEvent(event: any) {
@@ -154,12 +161,6 @@ export class LeaveCalendarComponent {
     if (!this.displaySaveButton) {
       this.isAllDay = event.checked;
       this.displayUpdateButton = true;
-    }
-  }
-
-  delete() {
-    if (confirm("Are you sure to delete ")) {
-      this.deleteLeaveInfo();
     }
   }
 
