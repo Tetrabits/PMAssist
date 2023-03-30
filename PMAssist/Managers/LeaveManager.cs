@@ -65,7 +65,7 @@ namespace PMAssist.Managers
                 previous.AddRange(current);
                 previous.AddRange(next);
 
-                //return previous;
+                return previous;
                 var final = new List<EventApi>();
                 var title = string.Empty;
                 var currentDate = DateTime.Today;
