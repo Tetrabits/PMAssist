@@ -1,0 +1,12 @@
+/*::ng-deep .input-styling input {
+  width: 40px !important;
+  margin: 0;
+  padding:0 0 0 0;
+}*/
+.pointer {
+  cursor: pointer
+}
+.flex-container {
+  display: flex;
+  align-items: center;
+}

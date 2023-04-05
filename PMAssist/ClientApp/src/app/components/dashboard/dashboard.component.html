@@ -1,1 +1,158 @@
-{{user.displayName}}
+<p-accordion >
+  <p-accordionTab *ngFor="let userTask of userTasks" header="{{userTask.user}}">
+
+    <p-tabView>
+      <p-tabPanel header="Yesterday">
+        <div class="flex flex-row-reverse">
+          <p-button label="Close the Day" icon="pi pi-check" styleClass="p-button-sm" (click)="closeDay(userTask)"></p-button>
+        </div>
+        <p-table [value]="userTask.yesterdayTasks" styleClass="p-datatable-sm">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th>Story</th>
+              <th>What</th>
+              <th>Type</th>
+              <th>Planned</th>
+              <th>Spent</th>
+              <th>Status</th>
+              <th>Actual</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-task>
+            <tr>
+              <td>{{task.userStory}}</td>
+              <td>{{task.what}}</td>
+              <td>{{task.type}}</td>
+              <td>{{task.planned}}</td>
+              <td>{{task.spent}}</td>
+              <td>
+                <!--<p-dropdown [options]="effortCategories" [(ngModel)]="task.status" optionLabel="name"
+    optionValue="id"></p-dropdown>-->
+                <i class="pi pi-chevron-left pointer" (click)="moveLeft(task)"></i>
+                <!--<i class="pi pi-play" style="color: slateblue"></i>-->
+                <span>{{task.status}}</span>
+                <i class="pi pi-chevron-right pointer" (click)="moveRight(task)"></i>
+
+              </td>
+
+              <td pEditableColumn>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText-sm type="text" size="1" maxlength="2" [(ngModel)]="task.actual">
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{task.actual}}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabPanel>
+      <p-tabPanel header="Today">
+        <app-work [disableDate]="true" (addWork)="addTask($event, userTask)"></app-work>
+       
+        <p-table [value]="userTask.tasks" styleClass="p-datatable-sm">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th>Story</th>
+              <th>What</th>
+              <th>Type</th>
+              <th>Planned</th>
+              <th>Status</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-task>
+            <tr>
+              <td>{{task.userStory}}</td>
+              <td>{{task.what}}</td>
+              <td>{{task.type}}</td>
+              <td>{{task.planned}}</td>
+              <td>
+                <!--<i class="pi pi-chevron-left pointer" (click)="moveLeft(task)"></i>-->
+                <span>{{task.status}}</span>
+                <!--<i class="pi pi-chevron-right pointer" (click)="moveRight(task)"></i>-->
+              </td>
+              
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabPanel>
+
+      <p-tabPanel header="Future">
+        <app-work [disableDate]="false" (addWork)="addFutureTask($event, userTask)"></app-work>
+          <!--<div class="flex-container">
+            <div><h4>Task:</h4></div>
+            <div style="flex: 0 0 150px; padding: 2px">
+              <label for="transactiondate" class="p-sr-only">Date</label>
+              <p-calendar id="transactiondate" [(ngModel)]="userTask.future.date" dateFormat="M dd, yy">
+              </p-calendar>
+            </div>
+            <div style="flex: 0 0 200px; padding: 2px">
+              <input style="width: 100%;" type="text" pInputText [(ngModel)]="userTask.future.userStory"
+                     placeholder="User Story" />
+            </div>
+            <div style="flex: 0 0 400px; padding: 2px">
+              <input style="width: 100%;" type="text" pInputText [(ngModel)]="userTask.future.what"
+                     placeholder="What" />
+            </div>
+            <div style="flex: 0 0 100px; padding: 2px">
+              <p-dropdown [style]="{width:'100%'}" [options]="taskTypes" [(ngModel)]="userTask.future.type"
+                          placeholder="Type" optionLabel="name" [showClear]="true">
+              </p-dropdown>
+            </div>
+            <div style="flex: 0 0 50px; padding: 2px">
+              <input style="width: 100%;" type="text" pInputText [(ngModel)]="userTask.future.planned"
+                     placeholder="Plan" />
+            </div>
+            <div style="flex: 0 0 100px; padding: 2px">
+              <button pButton type="button" label="  Add  " (click)="addFutureTask(userTask)"></button>
+            </div>
+          </div>
+     <br />-->
+        <p-table [value]="userTask.futureTasks" styleClass="p-datatable-sm">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th>Date</th>
+              <th>Story</th>
+              <th>What</th>
+              <th>Type</th>
+              <th>Planned</th>
+              <th>Status</th>
+              <th>Actual</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-task>
+            <tr>
+              <td>{{task.date|date}}</td>
+              <td>{{task.userStory}}</td>
+              <td>{{task.what}}</td>
+              <td>{{task.type}}</td>
+              <td>{{task.planned}}</td>
+              <td>
+                <!--<p-dropdown [options]="effortCategories" [(ngModel)]="task.status" optionLabel="name"
+          optionValue="id"></p-dropdown>-->
+                <i class="pi pi-chevron-left pointer" (click)="moveLeft(task)"></i>
+                <!--<i class="pi pi-play" style="color: slateblue"></i>-->
+                <span>{{task.status}}</span>
+                <i class="pi pi-chevron-right pointer" (click)="moveRight(task)"></i>
+
+              </td>
+              <!--<td>{{task.actual}}</td>-->
+              <td pEditableColumn>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText-sm type="text" size="1" maxlength="2" [(ngModel)]="task.actual">
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{task.actual}}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabPanel>
+    </p-tabView>
+  </p-accordionTab>
+</p-accordion>
