@@ -22,7 +22,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\model\effort.ts" />
+    <None Remove="ClientApp\src\app\model\work.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="ClientApp\.angular\cache\15.2.1\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\model\effort.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\model\work.ts" />
   </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
