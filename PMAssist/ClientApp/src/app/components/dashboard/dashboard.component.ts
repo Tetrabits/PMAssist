@@ -1,4 +1,52 @@
 import { Component, OnInit } from '@angular/core';
+
+export interface Project {
+  name: string;
+  sprintDuration: number;
+  sprintNumber: number;
+  startsOn: Date;
+  endsOn: Date;
+  duration: number;
+  stories: Story[];
+  bugs: Bug[];
+  users: User[];
+}
+
+export interface Story {
+  id: string;
+  points: number;
+}
+
+export interface Bug {
+  id: string;
+  rca: string;
+}
+
+export interface User {
+  name: string;
+  yesterdayActivities: Activity[]
+  activities: Activity[]
+  futureActivities: Activity[]
+}
+
+export interface Activity {
+  createdOn: Date;
+  closedOn: Date;
+  id: string;
+  linkID: string;
+  what: string;
+  type: string;
+  client: boolean;
+  plan: number;
+  totalSpent: number;
+  actual: number;
+  status: string;
+}
+
+export interface Effort {
+  burntOn: Date;
+  howMuch: number;
+}
 export interface Story {
   id: string;
   points: number;
@@ -7,15 +55,15 @@ export interface Work {
   howMuch: number;
 }
 
-export interface Activity {
-  what: string;
-  work: Work[];
-}
+//export interface Activity {
+//  what: string;
+//  work: Work[];
+//}
 
-export interface User {
-  headers: string[];
-  details: Activity[]
-}
+//export interface User {
+//  headers: string[];
+//  details: Activity[]
+//}
 
 export interface EffortCategory {
   id: number;
@@ -34,123 +82,79 @@ interface TaskType {
 })
 export class DashboardComponent implements OnInit {
 
-
-  users: User = { headers: [], details: [] };
-  startsOn: Date = new Date();
-  endsOn: Date = new Date();
-  stories: Story[] = [];
-  tasks: any = [{ "who": "Madhu Gurukar", userStory: "US5589928", what: "", "type": "Analysis", "status": "Planned", "planned": 2 },
-  { "who": "Madhu Gurukar", userStory: "US5589928", what: "", "type": "Development", "status": "Planned", "planned": 1 },
-  { "who": "Gajanan Tuppad", userStory: "US5589928", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5 },
-  { "who": "Madhu Gurukar", userStory: "US5590199", what: "", "type": "Analysis", "status": "Planned", "planned": 2 },
-  { "who": "Madhu Gurukar", userStory: "US5590199", what: "", "type": "Development", "status": "Planned", "planned": 1 },
-  { "who": "Gajanan Tuppad", userStory: "US5590199", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5 },
-  { "who": "Madhu Gurukar", userStory: "US5593026", what: "", "type": "Analysis", "status": "Planned", "planned": 2 },
-  { "who": "Madhu Gurukar", userStory: "US5590637", what: "", "type": "Development", "status": "Planned", "planned": 1 },
-  { "who": "Gajanan Tuppad", userStory: "US5590637", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5 },
-  { "who": "Rushikesh Thakare", userStory: "US5590197", what: "", "type": "Analysis", "status": "Completed", "planned": 2 },
-  { "who": "Rushikesh Thakare", userStory: "US5590197", what: "", "type": "Development", "status": "Completed", "planned": 1 },
-  { "who": "Madhu Gurukar", userStory: "US5590197", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5 },
-  { "who": "Rushikesh Thakare", userStory: "US5589502", what: "", "type": "Analysis", "status": "Completed", "planned": 2 },
-  { "who": "Rushikesh Thakare", userStory: "US5589502", what: "", "type": "Development", "status": "Completed", "planned": 1 },
-  { "who": "Madhu Gurukar", userStory: "US5589502", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5 },
-  { "who": "Rushikesh Thakare", userStory: "US5589505", what: "", "type": "Analysis", "status": "Completed", "planned": 2 },
-  { "who": "Rushikesh Thakare", userStory: "US5589505", what: "", "type": "Development", "status": "Completed", "planned": 1 },
-  { "who": "Madhu Gurukar", userStory: "US5589505", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5 },
-  { "who": "Rushikesh Thakare", userStory: "US5593556", what: "", "type": "Analysis", "status": "Planned", "planned": 2 },
-  { "who": "Rushikesh Thakare", userStory: "US5593556", what: "", "type": "Development", "status": "Planned", "planned": 1 },
-  { "who": "Madhu Gurukar", userStory: "US5593556", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5 },
-  { "who": "Rushikesh Thakare", userStory: "US5593652", what: "", "type": "Analysis", "status": "Planned", "planned": 2 },
-  { "who": "Rushikesh Thakare", userStory: "US5593652", what: "", "type": "Development", "status": "Planned", "planned": 1 },
-  { "who": "Madhu Gurukar", userStory: "US5593652", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5 },
-  { "who": "Rushikesh Thakare", userStory: "US5593680", what: "", "type": "Analysis", "status": "Planned", "planned": 2 },
-  { "who": "Rushikesh Thakare", userStory: "US5593680", what: "", "type": "Development", "status": "Planned", "planned": 1 },
-  { "who": "Madhu Gurukar", userStory: "US5593680", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5 }]
-
-  userTasks: any = [{
-    user: "Madhu Gurukar", "yesterdayTasks": [
-      { userStory: "US5589928", what: "", "type": "Analysis", "status": "Planned", "planned": 2, "spent":4, "actual": 0 },
-      { userStory: "US5589928", what: "", "type": "Development", "status": "Planned", "planned": 1, "spent": 4, "actual": 0 },
-      { userStory: "US5590199", what: "", "type": "Analysis", "status": "Planned", "planned": 2, "spent":4, "actual": 0 },
-      { userStory: "US5590199", what: "", "type": "Development", "status": "Planned", "planned": 1, "spent":4, "actual": 0 },
-      { userStory: "US5593026", what: "", "type": "Analysis", "status": "Planned", "planned": 2, "spent":4, "actual": 0 },
-      { userStory: "US5590637", what: "", "type": "Development", "status": "Planned", "planned": 1, "spent":4, "actual": 0 },
-      { userStory: "US5590197", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5, "spent":4, "actual": 0 },
-      { userStory: "US5589502", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5, "spent":4, "actual": 0 },
-      { userStory: "US5589505", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5, "spent":4, "actual": 0 },
-      { userStory: "US5593556", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5, "spent":4, "actual": 0 },
-      { userStory: "US5593652", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5, "spent":4, "actual": 0 },
-      { userStory: "US5593680", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5, "spent":4, "actual": 0 }],
-    "tasks": [],
-    "futureTasks": [],
-    "today": { date: new Date(), userStory: '', what: '', "type": '', "planned": 0 },
-    "future": { date: new Date(), userStory: '', what: '', type: '', planned: 0 },
-    "showToday": true,
-    "userStory": '',
-    "what": '',
-    "type": '',
-    "planned": 0
-  },
-  {
-    "user": "Gajanan Tuppad", "yesterdayTasks": [
-      { userStory: "US5589928", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5, "spent":4, "actual": 0 },
-      { userStory: "US5590199", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5, "spent":4, "actual": 0 },
-      { userStory: "US5590637", what: "", "type": "Code Review", "status": "Planned", "planned": 0.5, "spent":4, "actual": 0 }],
-    "tasks": [],
-    "futureTasks": [],
-    "today": { date: new Date(), userStory: '', what: '', "type": '', "planned": 0 },
-    "future": { date: new Date(), userStory: '', what: '', "type": '', "planned": 0 },
-    "showToday": true,
-    "userStory": '',
-    "what": '',
-    "type": '',
-    "planned": 0
-  },
-  {
-    "user": "Rushikesh Thakare", "yesterdayTasks": [
-      { userStory: "US5590197", what: "", "type": "Analysis", "status": "Completed", "planned": 2, "spent":4, "actual": 0 },
-      { userStory: "US5590197", what: "", "type": "Development", "status": "Completed", "planned": 1, "spent":4, "actual": 0 },
-      { userStory: "US5589502", what: "", "type": "Analysis", "status": "Completed", "planned": 2, "spent":4, "actual": 0 },
-      { userStory: "US5589502", what: "", "type": "Development", "status": "Completed", "planned": 1, "spent":4, "actual": 0 },
-      { userStory: "US5589505", what: "", "type": "Analysis", "status": "Completed", "planned": 2, "spent":4, "actual": 0 },
-      { userStory: "US5589505", what: "", "type": "Development", "status": "Completed", "planned": 1, "spent":4, "actual": 0 },
-      { userStory: "US5593556", what: "", "type": "Analysis", "status": "Planned", "planned": 2, "spent":4, "actual": 0 },
-      { userStory: "US5593556", what: "", "type": "Development", "status": "Planned", "planned": 1, "spent":4, "actual": 0 },
-      { userStory: "US5593652", what: "", "type": "Analysis", "status": "Planned", "planned": 2, "spent":4, "actual": 0 },
-      { userStory: "US5593652", what: "", "type": "Development", "status": "Planned", "planned": 1, "spent":4, "actual": 0 },
-      { userStory: "US5593680", what: "", "type": "Analysis", "status": "Planned", "planned": 2, "spent":4, "actual": 0 },
-      { userStory: "US5593680", what: "", "type": "Development", "status": "Planned", "planned": 1, "spent":4, "actual": 0 }],
-    "tasks": [],
-    "futureTasks": [],
-    "today": { date: new Date(), userStory: '', what: '', "type": '', "planned": 0 },
-    "future": { date: new Date(), userStory: '', what: '', "type": '', "planned": 0},
-    "showToday": true,
-    "userStory": '',
-    "what": '',
-    "type": '',
-    "planned": 0
-  }];
-
-  effortCategories: EffortCategory[] = [{ id: 1, name: 'Planned' }, { id: 2, name: 'Active' }, { id: 3, name: 'Completed' }];
-  taskTypes: TaskType[] = [{ value: 'Analysis', name: 'Analysis' }]
+  project: Project =
+    {
+      name: 'Essete Upgrade 4.8',
+      sprintDuration: 14,
+      sprintNumber: 7,
+      startsOn: new Date(),
+      endsOn: new Date(),
+      duration: 14,
+      stories: [{ id: "US5589505", points: 2 },
+      { id: "US5593556", points: 2 },
+      { id: "US5593652", points: 2 },
+      { id: "US5593680", points: 2 },
+      { id: "US5527284", points: 2 },
+      { id: "US5593850", points: 2 },
+      { id: "US5593862", points: 2 },
+      { id: "US5593897", points: 2 },
+      { id: "US5593821", points: 2 },
+      { id: "US5593924", points: 2 },
+      { id: "US5593967", points: 2 }],
+      bugs: [{ id: 'Bug 1', rca: 'Requirements missing' }],
+      users: [
+        {
+          name: 'Gajanan Tuppad', yesterdayActivities: [
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589928", what: "", type: "Code Review", client: true, status: "Planned", "plan": 0.5, "totalSpent": 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590199", what: "", type: "Code Review", client: true, status: "Planned", "plan": 0.5, "totalSpent": 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590637", what: "", type: "Code Review", client: true, status: "Planned", "plan": 0.5, "totalSpent": 4, "actual": 0 }
+          ], activities: [], futureActivities: []
+        },
+        {
+          name: 'Rushikesh Thakare', yesterdayActivities: [
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590197", what: "", type: "Analysis",  client: true, status:"Completed", plan: 2, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590197", what: "", type: "Development",  client: true, status:"Completed", plan: 1, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589502", what: "", type: "Analysis",  client: true, status:"Completed", plan: 2, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589502", what: "", type: "Development",  client: true, status:"Completed", plan: 1, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589505", what: "", type: "Analysis",  client: true, status:"Completed", plan: 2, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589505", what: "", type: "Development",  client: true, status:"Completed", plan: 1, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593556", what: "", type: "Analysis",  client: true, status:"Planned", plan: 2, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593556", what: "", type: "Development",  client: true, status:"Planned", plan: 1, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593652", what: "", type: "Analysis",  client: true, status:"Planned", plan: 2, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593652", what: "", type: "Development",  client: true, status:"Planned", plan: 1, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593680", what: "", type: "Analysis",  client: true, status:"Planned", plan: 2, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593680", what: "", type: "Development",  client: true, status:"Planned", plan: 1, totalSpent: 4, "actual": 0 }
+          ], activities: [], futureActivities: []
+        },
+        {
+          name: 'Madhu Gurukar', yesterdayActivities: [
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589928", what: "", "type": "Analysis",  client: true, status: "Planned", plan: 2, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589928", what: "", "type": "Development",  client: true, status: "Planned", plan: 1, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590199", what: "", "type": "Analysis",  client: true, status: "Planned", plan: 2, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590199", what: "", "type": "Development",  client: true, status: "Planned", plan: 1, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593026", what: "", "type": "Analysis",  client: true, status: "Planned", plan: 2, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590637", what: "", "type": "Development",  client: true, status: "Planned", plan: 1, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590197", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589502", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589505", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593556", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593652", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
+            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593680", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 }
+          ], activities: [], futureActivities: []
+        }],
+    };
 
   ngOnInit(): void {
 
-    this.users = {
-      headers: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14'],
-      details: [{ what: 'Task1', work: [{ howMuch: 1 }, { howMuch: 2 }, { howMuch: 3 }, { howMuch: 4 }, { howMuch: 5 }, { howMuch: 6 }, { howMuch: 7 }, { howMuch: 8 }, { howMuch: 9 }, { howMuch: 10 }, { howMuch: 11 }, { howMuch: 12 }, { howMuch: 13 }, { howMuch: 14 }] },
-      { what: 'Task2', work: [{ howMuch: 14 }, { howMuch: 13 }, { howMuch: 12 }, { howMuch: 11 }, { howMuch: 10 }, { howMuch: 9 }, { howMuch: 8 }, { howMuch: 7 }, { howMuch: 6 }, { howMuch: 5 }, { howMuch: 4 }, { howMuch: 3 }, { howMuch: 2 }, { howMuch: 1 }] }]
-    };
 
-    this.stories = [{ id: 'US90978', points: 5 }, { id: 'US90978', points: 8 }]
 
   }
 
   startDateSelected(event: any) {
-    let date = new Date();
-    date.setDate(this.startsOn.getDate() + 3)
+    //let date = new Date();
+    //date.setDate(this.startsOn.getDate() + 3)
     //this.endsOn.setDate(this.startsOn.getDate() + 3);
-    this.endsOn = date;
+    //this.endsOn = date;
   }
 
   clickToday(userTasks: any) {
@@ -175,7 +179,7 @@ export class DashboardComponent implements OnInit {
     userTasks.showToday = true;
   }
 
-  addTask(work: any, userWork:any) {
+  addTask(work: any, userWork: any) {
     userWork.tasks.push({
       "date": work.date,
       "userStory": work.userStory,
