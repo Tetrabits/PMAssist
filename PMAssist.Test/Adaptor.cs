@@ -30,11 +30,11 @@ namespace PMAssist.Test
             {
                 projectEx.StartsOn = sprint.StartsOn;
                 projectEx.EndsOn = sprint.EndsOn;
-                projectEx.Stories = sprint.Stories.Select(n => new StoryEx
-                {
-                    Id = n.ID,
-                    Points = n.Points,
-                });
+                //projectEx.Stories = sprint.Stories.Select(n => new StoryEx
+                //{
+                //    Id = n.ID,
+                //    Points = n.Points,
+                //});
                 projectEx.Bugs = sprint.Bugs.Select(n => new BugEx
                 {
                     Id = n.ID,
@@ -54,7 +54,7 @@ namespace PMAssist.Test
                         LinkID = n.LinkID,
                         Plan = n.Plan,
                         Status = n.Status,
-                        TotalSpent = n.Actuals.Sum(n => n.Value),
+                        //TotalSpent = n.Actuals.Sum(n => n.Value),
                         Type = n.Type,
                         What = n.What
                     });
