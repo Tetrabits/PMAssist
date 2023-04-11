@@ -125,11 +125,28 @@ namespace PMAssist.Managers
                         currentDate = item.Start ?? DateTime.MinValue;
                     }
                 }
-              
+
                 return final;
             });
 
         }
+
+        public async Task<string> GetSprintData(string projectKey, string authToken)
+        {
+            var url = $"{UrlHelper.Sprint.SprintUrl(projectKey)}";
+            var sprinrData = await dataAccess.GetAll(authToken, url);
+
+            try
+            {
+                var rawData = JsonSerializer.Deserialize<Sprint>(sprinrData);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return sprinrData;
+        }
+
 
         private async Task<IEnumerable<EventApi>> GetMonthEvents(LeaveRequestModel leaveRequestModel)
         {
