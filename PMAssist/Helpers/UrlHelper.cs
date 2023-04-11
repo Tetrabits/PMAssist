@@ -30,5 +30,24 @@
                 return $"{DayUrl(date,userId)}/PTO";
             }
         }
+        
+        public static class Project
+        {
+            private static string baseUrl = "projects";
+            public static string ProjectUrl(string projectKey)
+            {
+                return $"{baseUrl}/{projectKey}";
+            }
+            
+        }
+
+        public static class Sprint
+        {
+            private static string baseUrl = "sprints";
+            public static string SprintUrl(string projectKey)
+            {
+                return $"{baseUrl}/{projectKey}";
+            }
+        }
     }
 }
