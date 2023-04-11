@@ -11,7 +11,8 @@ const PROXY_CONFIG = [
       "/leaveinformation",
       "/leaveinformation/addevent",
       "/leaveinformation/deleteevent",
-      "/leaveinformation/getleaves"
+      "/leaveinformation/getleaves",
+      "/scrum"
    ],
     target: target,
     secure: false,
