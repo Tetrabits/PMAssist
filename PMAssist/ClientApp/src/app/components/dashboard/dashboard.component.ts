@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Activity } from '../../model/activity';
 import { ScrumService } from '../../shared/services/scrum.service';
+import { ProjectService } from '../../shared/services/project.service';
 
 export interface Project {
   name: string;
@@ -134,14 +135,19 @@ export class DashboardComponent implements OnInit {
 
   project: any;
   progress: number = 0;
+  sprintKey: string='';
 
-  constructor(private scrumService: ScrumService) {
+  constructor(private scrumService: ScrumService, private projectService: ProjectService) {
 
     scrumService.getScrumData(new Date().toISOString().replace(/T.*$/, '')).subscribe((data: Project) => {
       this.project = data;
       let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);
       let elapsed = (new Date(this.project.endsOn).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
       this.progress = Math.ceil((((total - elapsed) / total) * 100));
+    });
+
+    projectService.getSprintKey('essette', new Date().toISOString().replace(/T.*$/, '')).subscribe((data: EffortCategory) => {
+      this.sprintKey = data.name;
     });
 
   }

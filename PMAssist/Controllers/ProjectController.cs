@@ -17,11 +17,12 @@ namespace PMAssist.Controllers
         }
 
         [HttpGet]
+        [Route("getscrumkey")]
         public async Task<IActionResult> GetScrumKey(string projectKey, string currentDate)
         {
             var result =  await Task.Run(() => 
             {
-                return "essette06";
+                return "{\"name\":\"essette06\"}";
             });
 
             return Ok(result);
