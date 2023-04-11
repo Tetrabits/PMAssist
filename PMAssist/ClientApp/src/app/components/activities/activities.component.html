@@ -1,0 +1,73 @@
+<p-table [value]="activities" styleClass="p-datatable-sm" [scrollable]="true" scrollHeight="300px">
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th style="width:8%">When</th>
+      <th style="width:8%">Story</th>
+      <th>What</th>
+      <th style="width:10%">Type</th>
+      <th style="width:4%">Planned</th>
+      <th *ngIf="for==='yesterday'||for==='today'" style="width:4%">Spent</th>
+      <th *ngIf="for==='yesterday'||for==='today'" style="width:4%">Actual</th>
+      <th style="width:12%">Status</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-activity>
+    <tr>
+      <td>{{activity.createdOn|date}}</td>
+      <td>{{activity.linkID}}</td>
+      <td>{{activity.what}}</td>
+      <td>{{activity.type}}</td>
+      <td style="text-align: right">{{activity.plan| number:'1.2-2'}}</td>
+      <td *ngIf="for==='yesterday'||for==='today'" style="text-align: right">{{activity.totalSpent| number:'1.2-2'}}</td>
+      <td *ngIf="for==='yesterday'||for==='today'" style="text-align: right" pEditableColumn>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input pInputText-sm type="text" size="1" maxlength="2" [(ngModel)]="activity.actual" style="text-align: right">
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{activity.actual| number:'1.2-2'}}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td>
+        <div class="flex flex-row gap-1">
+
+          <div *ngIf="activity.status==='Planned'; else elseBlockPlanned">
+            <span class="card w-1rem bg-primary text-center vertical-align-middle pointer">P</span>
+          </div>
+          <ng-template #elseBlockPlanned><span class="card w-1rem text-center vertical-align-middle pointer" (click)="activity.status='Planned'">P</span></ng-template>
+
+          <div *ngIf="activity.status==='In Progress'; else elseBlockInProgress">
+            <span class="card w-1rem bg-primary text-center vertical-align-middle pointer">I</span>
+          </div>
+          <ng-template #elseBlockInProgress><span class="card w-1rem text-center vertical-align-middle pointer" (click)="activity.status='In Progress'">I</span></ng-template>
+
+          <div *ngIf="activity.status==='Completed'; else elseBlockCompleted">
+            <span class="card w-1rem bg-primary text-center vertical-align-middle pointer">C</span>
+          </div>
+          <ng-template #elseBlockCompleted><span class="card w-1rem text-center vertical-align-middle pointer"  (click)="activity.status='Completed'">C</span></ng-template>
+
+          
+          <!--<div class="flex-none">
+    <i *ngIf="for==='yesterday'" class="pi pi-chevron-right pointer" (click)="moveLeft(activity)"></i>
+  </div>
+  <div class="flex-none">
+    <i *ngIf="for==='yesterday'" class="pi pi-angle-double-right pointer" (click)="moveLeft(activity)"></i>
+  </div>
+  <div class="flex-none">
+    <i *ngIf="for==='yesterday'" class="pi pi-lock pointer" (click)="moveLeft(activity)"></i>
+  </div>-->
+          <!--<div class="flex-grow-1 flex align-items-center justify-content-center">
+    {{activity.status}}
+    <i class="pi pi-angle-right"></i>
+    <i class="pi pi-angle-double-right"></i>
+    <i class="pi pi-angle-lock"></i>
+  </div>
+  <div class="flex-none">
+    <i *ngIf="for==='yesterday'" class="pi pi-chevron-right pointer" (click)="moveRight(activity)"></i>
+  </div>-->
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

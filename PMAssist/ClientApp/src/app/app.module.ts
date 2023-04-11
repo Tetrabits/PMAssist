@@ -35,9 +35,13 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
 import { AccordionModule } from 'primeng/accordion';
 import { DropdownModule } from 'primeng/dropdown';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { TagModule } from 'primeng/tag';
 
 import { LeaveCalendarComponent } from './components/leavecalendar/leavecalendar.component';
 import { WorkComponent } from './components/work/work.component';
+import { ActivityComponent } from './components/activity/activity.component';
+import { ActivitiesComponent } from './components/activities/activities.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +54,9 @@ import { WorkComponent } from './components/work/work.component';
     DashboardComponent,
     LogoutComponent,
     LeaveCalendarComponent,
-    WorkComponent
+    WorkComponent,
+    ActivityComponent,
+    ActivitiesComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -77,6 +83,8 @@ import { WorkComponent } from './components/work/work.component';
     TabViewModule,
     InputTextModule,
     CheckboxModule,
+    ProgressBarModule,
+    TagModule,
     FullCalendarModule
   ],
   providers: [AuthService,DatePipe],

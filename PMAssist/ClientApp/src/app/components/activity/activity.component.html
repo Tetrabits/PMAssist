@@ -1,0 +1,31 @@
+<div class="flex overflow-hidden">
+  <div class="flex-none flex align-items-center justify-content-center pr-1">Task: </div>
+  <div class="flex align-items-center justify-content-center px-1" style="flex: 0 0 120px">
+    <div>
+      <label for="taskdate" class="p-sr-only">Date</label>
+      <p-calendar appendTo="body" id="taskdate" dateFormat="M dd, yy" [minDate]="minDate" [maxDate]="maxDate" [(ngModel)]="activity.createdOn">
+      </p-calendar>
+    </div>
+  </div>
+  <div class="flex align-items-center justify-content-center px-1" style="flex: 0 0 100px">
+    <input class="w-full" type="text" pInputText placeholder="User Story" [(ngModel)]="activity.linkID"/>
+  </div>
+  <div class="flex-grow-1 flex align-items-center justify-content-center px-1">
+    <input class="w-full" type="text" pInputText placeholder="What" [(ngModel)]="activity.what"/>
+  </div>
+  <div class="flex flex-none align-items-center  justify-content-center px-1">
+    <p-dropdown appendTo="body" class="w-full" [options]="taskTypes" placeholder="Type" optionLabel="name" [showClear]="true" [(ngModel)]="activity.type">
+    </p-dropdown>
+  </div>
+  <div class="flex align-items-center justify-content-center px-1" style="flex: 0 0 50px">
+    <p-inputNumber [(ngModel)]="activity.plan" [inputStyle]="{'width':'60px','text-align':'right'}" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="99.99" placeholder="Plan"> </p-inputNumber>
+  </div>
+  <div *ngIf="for==='yesterday'" class="flex flex-none align-items-center justify-content-center px-1">
+    <p-inputNumber [(ngModel)]="activity.actual" [inputStyle]="{'width':'60px','text-align':'right'}" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="99.99"placeholder="Actual"> </p-inputNumber>
+  </div>
+  <div class="flex-none flex align-items-center justify-content-center pl-1 pr-2 py-2">
+    <!--<button pButton type="button" label="  Add  "></button>-->
+    <p-button icon="pi pi-plus" (click)="addTask()"></p-button>
+  </div>
+</div>
+

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Activity } from '../../model/activity';
+import { ScrumService } from '../../shared/services/scrum.service';
 
 export interface Project {
   name: string;
@@ -27,20 +29,6 @@ export interface User {
   yesterdayActivities: Activity[]
   activities: Activity[]
   futureActivities: Activity[]
-}
-
-export interface Activity {
-  createdOn: Date;
-  closedOn: Date;
-  id: string;
-  linkID: string;
-  what: string;
-  type: string;
-  client: boolean;
-  plan: number;
-  totalSpent: number;
-  actual: number;
-  status: string;
 }
 
 export interface Effort {
@@ -82,67 +70,81 @@ interface TaskType {
 })
 export class DashboardComponent implements OnInit {
 
-  project: Project =
-    {
-      name: 'Essete Upgrade 4.8',
-      sprintDuration: 14,
-      sprintNumber: 7,
-      startsOn: new Date(),
-      endsOn: new Date(),
-      duration: 14,
-      stories: [{ id: "US5589505", points: 2 },
-      { id: "US5593556", points: 2 },
-      { id: "US5593652", points: 2 },
-      { id: "US5593680", points: 2 },
-      { id: "US5527284", points: 2 },
-      { id: "US5593850", points: 2 },
-      { id: "US5593862", points: 2 },
-      { id: "US5593897", points: 2 },
-      { id: "US5593821", points: 2 },
-      { id: "US5593924", points: 2 },
-      { id: "US5593967", points: 2 }],
-      bugs: [{ id: 'Bug 1', rca: 'Requirements missing' }],
-      users: [
-        {
-          name: 'Gajanan Tuppad', yesterdayActivities: [
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589928", what: "", type: "Code Review", client: true, status: "Planned", "plan": 0.5, "totalSpent": 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590199", what: "", type: "Code Review", client: true, status: "Planned", "plan": 0.5, "totalSpent": 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590637", what: "", type: "Code Review", client: true, status: "Planned", "plan": 0.5, "totalSpent": 4, "actual": 0 }
-          ], activities: [], futureActivities: []
-        },
-        {
-          name: 'Rushikesh Thakare', yesterdayActivities: [
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590197", what: "", type: "Analysis",  client: true, status:"Completed", plan: 2, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590197", what: "", type: "Development",  client: true, status:"Completed", plan: 1, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589502", what: "", type: "Analysis",  client: true, status:"Completed", plan: 2, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589502", what: "", type: "Development",  client: true, status:"Completed", plan: 1, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589505", what: "", type: "Analysis",  client: true, status:"Completed", plan: 2, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589505", what: "", type: "Development",  client: true, status:"Completed", plan: 1, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593556", what: "", type: "Analysis",  client: true, status:"Planned", plan: 2, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593556", what: "", type: "Development",  client: true, status:"Planned", plan: 1, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593652", what: "", type: "Analysis",  client: true, status:"Planned", plan: 2, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593652", what: "", type: "Development",  client: true, status:"Planned", plan: 1, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593680", what: "", type: "Analysis",  client: true, status:"Planned", plan: 2, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593680", what: "", type: "Development",  client: true, status:"Planned", plan: 1, totalSpent: 4, "actual": 0 }
-          ], activities: [], futureActivities: []
-        },
-        {
-          name: 'Madhu Gurukar', yesterdayActivities: [
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589928", what: "", "type": "Analysis",  client: true, status: "Planned", plan: 2, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589928", what: "", "type": "Development",  client: true, status: "Planned", plan: 1, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590199", what: "", "type": "Analysis",  client: true, status: "Planned", plan: 2, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590199", what: "", "type": "Development",  client: true, status: "Planned", plan: 1, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593026", what: "", "type": "Analysis",  client: true, status: "Planned", plan: 2, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590637", what: "", "type": "Development",  client: true, status: "Planned", plan: 1, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590197", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589502", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589505", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593556", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593652", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
-            { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593680", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 }
-          ], activities: [], futureActivities: []
-        }],
-    };
+  //project: Project =
+  //  {
+  //    name: 'Essete Upgrade 4.8',
+  //    sprintDuration: 14,
+  //    sprintNumber: 7,
+  //    startsOn: new Date(),
+  //    endsOn: new Date(),
+  //    duration: 14,
+  //    stories: [{ id: "US5589505", points: 2 },
+  //    { id: "US5593556", points: 2 },
+  //    { id: "US5593652", points: 2 },
+  //    { id: "US5593680", points: 2 },
+  //    { id: "US5527284", points: 2 },
+  //    { id: "US5593850", points: 2 },
+  //    { id: "US5593862", points: 2 },
+  //    { id: "US5593897", points: 2 },
+  //    { id: "US5593821", points: 2 },
+  //    { id: "US5593924", points: 2 },
+  //    { id: "US5593967", points: 2 }],
+  //    bugs: [{ id: 'Bug 1', rca: 'Requirements missing' }],
+  //    users: [
+  //      {
+  //        name: 'Gajanan Tuppad', yesterdayActivities: [
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589928", what: "", type: "Code Review", client: true, status: "Planned", "plan": 0.5, "totalSpent": 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590199", what: "", type: "Code Review", client: true, status: "Planned", "plan": 0.5, "totalSpent": 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590637", what: "", type: "Code Review", client: true, status: "Planned", "plan": 0.5, "totalSpent": 4, "actual": 0 }
+  //        ], activities: [], futureActivities: []
+  //      },
+  //      {
+  //        name: 'Rushikesh Thakare', yesterdayActivities: [
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590197", what: "", type: "Analysis",  client: true, status:"Completed", plan: 2, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590197", what: "", type: "Development",  client: true, status:"Completed", plan: 1, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589502", what: "", type: "Analysis",  client: true, status:"Completed", plan: 2, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589502", what: "", type: "Development",  client: true, status:"Completed", plan: 1, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589505", what: "", type: "Analysis",  client: true, status:"Completed", plan: 2, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589505", what: "", type: "Development",  client: true, status:"Completed", plan: 1, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593556", what: "", type: "Analysis",  client: true, status:"Planned", plan: 2, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593556", what: "", type: "Development",  client: true, status:"Planned", plan: 1, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593652", what: "", type: "Analysis",  client: true, status:"Planned", plan: 2, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593652", what: "", type: "Development",  client: true, status:"Planned", plan: 1, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593680", what: "", type: "Analysis",  client: true, status:"Planned", plan: 2, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593680", what: "", type: "Development",  client: true, status:"Planned", plan: 1, totalSpent: 4, "actual": 0 }
+  //        ], activities: [], futureActivities: []
+  //      },
+  //      {
+  //        name: 'Madhu Gurukar', yesterdayActivities: [
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589928", what: "", "type": "Analysis",  client: true, status: "Planned", plan: 2, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589928", what: "", "type": "Development",  client: true, status: "Planned", plan: 1, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590199", what: "", "type": "Analysis",  client: true, status: "Planned", plan: 2, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590199", what: "", "type": "Development",  client: true, status: "Planned", plan: 1, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593026", what: "", "type": "Analysis",  client: true, status: "Planned", plan: 2, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590637", what: "", "type": "Development",  client: true, status: "Planned", plan: 1, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590197", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589502", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589505", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593556", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593652", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
+  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593680", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 }
+  //        ], activities: [], futureActivities: []
+  //      }],
+  //  };
+
+  project: any;
+  progress: number = 0;
+
+  constructor(private scrumService: ScrumService) {
+
+    scrumService.getScrumData(new Date().toISOString().replace(/T.*$/, '')).subscribe((data: Project) => {
+      this.project = data;
+      let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);
+      let elapsed = (new Date(this.project.endsOn).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
+      this.progress = Math.ceil((((total - elapsed) / total) * 100));
+    });
+
+  }
 
   ngOnInit(): void {
 
@@ -168,26 +170,41 @@ export class DashboardComponent implements OnInit {
     userTasks.showToday = true;
   }
 
-  closeDay(userTasks: any) {
-    for (let i = userTasks.yesterdayTasks.length - 1; i > -1; i--) {
-      if (userTasks.yesterdayTasks[i].status !== 'Completed') {
-        userTasks.tasks.push(userTasks.yesterdayTasks[i]);
-        userTasks.yesterdayTasks.splice(i, 1);
-      }
-      else { }
-    }
-    userTasks.showToday = true;
+  pendingActivities(activity: Activity): boolean {
+    return activity.status !== 'Completed';
   }
 
-  addTask(work: any, userWork: any) {
-    userWork.tasks.push({
-      "date": work.date,
-      "userStory": work.userStory,
-      "what": work.what,
-      "type": work.type.value,
-      "planned": work.planEffort,
-      "status": "Planned"
-    })
+  closeDay(user: User) {
+
+    let pendingActivities = user.yesterdayActivities.filter(this.pendingActivities)
+  
+    pendingActivities.forEach(function (value) {
+      user.activities.splice(0, 0, value);
+    });
+
+    //remove the not completed items from yesterday's activites 
+    for (let i = user.yesterdayActivities.length - 1; i>-1; i--) {
+      if (user.yesterdayActivities[i].status !== 'Completed') {
+        user.yesterdayActivities.splice(i, 1);
+      }
+    }
+
+    
+  }
+
+  effort(activities: Activity[]): number {
+    let total: number = 0;
+    var sumNumber = activities.reduce((acc, cur) => acc + Number(cur.actual), 0)
+    //for (let i = 0; i < activities.length; i++) {
+    //  let value: number = activities[i]?.actual?.valueOf()||0;
+    //  total = total + value;
+    //  console.log(total);
+    //}
+    return sumNumber;
+  }
+
+  addTask(activity: Activity, activities: Activity[]) {
+    activities.push(activity)
   }
 
   moveRight(userTask: any) {
@@ -218,4 +235,6 @@ export class DashboardComponent implements OnInit {
       "status": "Planned"
     })
   }
+
+  
 }
