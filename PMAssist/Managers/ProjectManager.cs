@@ -23,110 +23,47 @@ namespace PMAssist.Managers
             dataAccess = new DataAccessRepository();
         }
 
-        public async Task<IEnumerable<EventApi>> GetLeaves(LeaveRequestModel leaveRequestModel)
+        public async Task<string> GetSprintKey(string projectKey, DateTime date)
         {
-            return await Task.Run(() =>
+            return await Task.Run(async () =>
             {
-                var previous = new List<EventApi>();
-                var current = new List<EventApi>();
-                var next = new List<EventApi>();
+                var url = UrlHelper.Project.ProjectUrl(projectKey);
 
-                var month = leaveRequestModel.Date.Month;
-                var year = leaveRequestModel.Date.Year;
+                var response = await dataAccess.GetData(string.Empty, url, string.Empty);
 
-                var date = new DateTime(year, month, 1).AddMonths(1);
+                var project = JsonSerializer.Deserialize<Project>(response);
+                var sprint = project.Sprints.FirstOrDefault(n => n.StartsOn <= date && date <= n.EndsOn);
 
-                Parallel.Invoke(
-                    () =>
-                    {
-                        previous = GetMonthEvents(new LeaveRequestModel
-                        {
-                            AuthToken = leaveRequestModel.AuthToken,
-                            UserId = leaveRequestModel.UserId,
-                            Date = leaveRequestModel.Date.AddMonths(-1)
-                        }).GetAwaiter().GetResult().ToList();
-                    },
-                    () =>
-                    {
-                        current = GetMonthEvents(leaveRequestModel).GetAwaiter().GetResult().ToList();
-                    },
-                    () =>
-                    {
-                        next = GetMonthEvents(new LeaveRequestModel
-                        {
-                            AuthToken = leaveRequestModel.AuthToken,
-                            UserId = leaveRequestModel.UserId,
-                            Date = leaveRequestModel.Date.AddMonths(1)
-                        }).GetAwaiter().GetResult().ToList();
-
-                    });
-
-                previous.AddRange(current);
-                previous.AddRange(next);
-
-                return previous;
-                var final = new List<EventApi>();
-                var title = string.Empty;
-                var currentDate = DateTime.Today;
-                EventApi? leave = null;
-
-                foreach (var item in previous.OrderBy(n => n.Title).ThenBy(n => n.Start))
+                if (sprint != null)
                 {
-                    if (item.Title.Equals(title))
-                    {
-                        //This is the same person
-                        var date1 = (item.Start ?? DateTime.MinValue).Date;
-                        if (date1 == currentDate.AddDays(1))
-                        {
-                            if (leave != null)
-                            {
-                                leave.End = new DateTime(date1.Year, date1.Month, date1.Day, 23, 59, 59);
-                            }
-                            currentDate = date1;
-                        }
-                        else
-                        {
-                            if (leave != null)
-                            {
-                                leave.End = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59);
-                                final.Add(leave);
-                            }
-
-                            leave = new EventApi
-                            {
-                                ID = item.ID,
-                                Title = item.Title,
-                                Start = item.Start,
-                                End = item.End
-                            };
-
-                            title = item.Title;
-                            currentDate = item.Start ?? DateTime.MinValue;
-                        }
-                    }
-                    else
-                    {
-                        //Person has changed, Add the leave info and then create a Leave Object
-                        if (leave != null)
-                        {
-                            leave.End = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59);
-                            final.Add(leave);
-                        }
-
-                        leave = new EventApi
-                        {
-                            ID = item.ID,
-                            Title = item.Title,
-                            Start = item.Start,
-                            End = item.End
-                        };
-
-                        title = item.Title;
-                        currentDate = item.Start ?? DateTime.MinValue;
-                    }
+                    return $"{projectKey}{sprint.StartsOn.ToString("yyyyMMdd")}";
                 }
-              
-                return final;
+                return string.Empty;
+            });
+
+        }
+
+        public async Task<string> PutSprint(string projectKey, Sprint sprint)
+        {
+            return await Task.Run(async () =>
+            {
+                var url = UrlHelper.Project.ProjectUrl(projectKey);
+
+                var response = await dataAccess.GetData(string.Empty, url, string.Empty);
+
+                var project = JsonSerializer.Deserialize<Project>(response);
+                var sprintIndex = project.Sprints.Count();
+
+
+                url = $"{url}/sprints/{sprintIndex}.json";
+
+                var x = await dataAccess.PutData(string.Empty, url, JsonSerializer.Serialize(sprint));
+
+                if (sprint != null)
+                {
+                    return $"{projectKey}{sprint.StartsOn.ToString("yyyyMMdd")}";
+                }
+                return string.Empty;
             });
 
         }

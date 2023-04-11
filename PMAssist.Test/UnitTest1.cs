@@ -1,3 +1,4 @@
+using PMAssist.Managers;
 using PMAssist.Models;
 using System.Text.Json;
 
@@ -5,6 +6,58 @@ namespace PMAssist.Test
 {
     public class UnitTest1
     {
+        [Fact]
+        public void BaseData()
+        {
+            var s = new Sprint
+            {
+                StartsOn = new DateTime(2023, 03, 29),
+                EndsOn = new DateTime(2023, 04, 11),
+                SprintNumber = 6,
+            };
+
+            var project = new Project
+            {
+                Name = "Essette Upgrade 4.8",
+                Sprints = new List<Sprint> { s }
+            };
+
+            var content = JsonSerializer.Serialize(project);
+
+            //var x = new ProjectManager();
+            //var key = x.GetSprintKey("essette", new DateTime(2023, 3, 30)).GetAwaiter().GetResult();
+
+        }
+
+        [Fact]
+        public void AddSprint()
+        {
+            //var s = new Sprint
+            //{
+            //    StartsOn = new DateTime(2023, 03, 29),
+            //    EndsOn = new DateTime(2023, 04, 11),
+            //    SprintNumber = 6,
+            //};
+
+            //var project = new Project
+            //{
+            //    Name = "Essette Upgrade 4.8",
+            //    Sprints = new List<Sprint> { s }
+            //};
+
+            //var content = JsonSerializer.Serialize(project);
+            var y = new ProjectManager();
+            var x = new Sprint
+            {
+                SprintNumber = 7,
+                StartsOn = new DateTime(2024,04,12),
+                EndsOn = new DateTime(2024, 04, 25),
+                Duration = 14
+            };
+            var key = y.PutSprint("essette",x ).GetAwaiter().GetResult();
+
+        }
+
         [Fact]
         public void Test1()
         {
