@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Project } from '../../components/dashboard/dashboard.component';
 
+
 export interface EffortCategory {
   id: number;
   name: string;
@@ -14,6 +15,10 @@ export interface EffortCategory {
 export class ProjectService {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
+  }
+
+  getProjects(): Observable<Project[]> {
+    return this.http.get<Project[]>(this.baseUrl + 'project');
   }
 
   getSprintKey(projectKey: string, currentDate: any): Observable<EffortCategory> {

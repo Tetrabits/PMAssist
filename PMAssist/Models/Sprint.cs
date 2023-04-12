@@ -5,7 +5,7 @@ namespace PMAssist.Models
     public class Sprint
     {
         [JsonPropertyName("sprintnumber")]        
-        public int SprintNumber { get; set; } = 0;
+        public short SprintNumber { get; set; } = 0;
         [JsonPropertyName("startson")]
         public DateTime StartsOn { get; set; }
         [JsonPropertyName("endson")]

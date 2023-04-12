@@ -14,6 +14,7 @@ const PROXY_CONFIG = [
       "/leaveinformation/getleaves",
       "/scrum",
       "/scrum/getscrumkey",
+      "/scrum/getsprint",
       "/project",
       "/project/getscrumkey"
    ],
