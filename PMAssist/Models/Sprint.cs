@@ -12,9 +12,6 @@ namespace PMAssist.Models
         public DateTime EndsOn { get; set; }
         [JsonPropertyName("duration")]
         public short Duration { get; set; } = 14;
-
-        //[JsonPropertyName("stories")]
-        //public IEnumerable<Story> Stories { get; set; }
         [JsonPropertyName("bugs")]
         public IEnumerable<Bug> Bugs { get; set; }
         [JsonPropertyName("users")]

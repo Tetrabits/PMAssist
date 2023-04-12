@@ -61,9 +61,9 @@ namespace PMAssist.Test
                 projectEx.Users.Add(new UserEx
                 {
                     Name = user.Name,
-                    YesterdayActivities = activities.Where(n=>n.CreatedOn.Date< today.Date),
-                    Activities = activities.Where(n => n.CreatedOn.Date == today.Date),
-                    FutureActivities = activities.Where(n => n.CreatedOn.Date > today.Date),
+                    //YesterdayActivities = activities.Where(n=>n.CreatedOn.Date< today.Date),
+                    //Activities = activities.Where(n => n.CreatedOn.Date == today.Date),
+                    //FutureActivities = activities.Where(n => n.CreatedOn.Date > today.Date),
                 });
 
             }
