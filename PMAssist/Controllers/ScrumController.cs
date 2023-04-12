@@ -2,6 +2,7 @@
 using PMAssist.Models.External;
 using PMAssist.Models;
 using System.Text.Json;
+using PMAssist.Managers;
 
 namespace PMAssist.Controllers
 {
@@ -10,79 +11,56 @@ namespace PMAssist.Controllers
     public class ScrumController : ControllerBase
     {
         private readonly ILogger<ScrumController> _logger;
+        private ProjectManager projectManager;
+        private SprintManager sprintManager;
+        
+        
 
         public ScrumController(ILogger<ScrumController> logger)
         {
             _logger = logger;
+            projectManager = new();
+            sprintManager = new();
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string currentDate)
+        public async Task<IActionResult> Get(string projectKey, string currentDate)
         {
-            return Task.Run(() =>
+
+            var date = DateTime.Parse(currentDate);
+            var result = await projectManager.GetSprintKey(projectKey, date);
+            var content = await sprintManager.GetSprints(result);
+            return Ok(content);
+            
+        }
+
+        [HttpGet]
+        [Route("getsprint")]
+        public async Task<IActionResult> GetSprint(string projectKey, short sprintNumber)
+        {
+
+            var result = await projectManager.GetProjects();
+
+            var project = result.FirstOrDefault(n => n.ProjectKey == projectKey);
+            if (project == null)
             {
+                return Ok("");
+            }
 
-                var content = System.IO.File.ReadAllText("D:\\Hariprasad\\Code\\Tetrabits\\PMAssist\\ProjectData.json");
+            var sprint = project.Sprints.FirstOrDefault(n => n.SprintNumber == sprintNumber);
+            var date = sprint.StartsOn.ToString("yyyyMMdd");
 
-                var project = JsonSerializer.Deserialize<Project>(content);
-                var today = Convert.ToDateTime(currentDate);
+            var sprintKey = $"{projectKey}{date}";
 
-                var projectEx = new ProjectEx
-                {
-                    Name = project.Name,
-                    SprintDuration = project.SprintDuration
-                };
+            var content = await sprintManager.GetSprints(sprintKey);
 
-                var sprint = project.Sprints.FirstOrDefault(n => n.StartsOn <= today && n.EndsOn >= today);
+            content.Name = project.Name;
+            content.StartsOn = sprint.StartsOn;
+            content.EndsOn = sprint.EndsOn;
 
-                if (sprint == null)
-                {
-                    return Ok(projectEx);
-                }
-                else
-                {
-                    projectEx.StartsOn = sprint.StartsOn;
-                    projectEx.EndsOn = sprint.EndsOn;
-                    //projectEx.Stories = sprint.Stories.Select(n => new StoryEx
-                    //{
-                    //    Id = n.ID,
-                    //    Points = n.Points,
-                    //});
-                    projectEx.Bugs = sprint.Bugs.Select(n => new BugEx
-                    {
-                        Id = n.ID,
-                        Rca = n.RCA,
-                    });
-                }
 
-                foreach (var user in sprint.Users)
-                {
-                    var activities = user.Activities.Where(n => n.Status != "Completed")
-                        .Select(n => new ActivityEx
-                        {
-                            ClosedOn = n.ClosedOn,
-                            CreatedOn = n.CreatedOn,
-                            Client = n.Client,
-                            Id = n.ID,
-                            LinkID = n.LinkID,
-                            Plan = n.Plan,
-                            Status = n.Status,
-                            //TotalSpent = n.Actuals.Sum(n => n.Value),
-                            Type = n.Type,
-                            What = n.What
-                        });
-                    projectEx.Users.Add(new UserEx
-                    {
-                        Name = user.Name,
-                        YesterdayActivities = activities.Where(n => n.CreatedOn.Date < today.Date),
-                        Activities = activities.Where(n => n.CreatedOn.Date == today.Date),
-                        FutureActivities = activities.Where(n => n.CreatedOn.Date > today.Date),
-                    });
+            return Ok(content);
 
-                }
-                return Ok(projectEx);
-
-            }).GetAwaiter().GetResult();
         }
     }
 }

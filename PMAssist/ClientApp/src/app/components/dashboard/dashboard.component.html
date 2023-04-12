@@ -1,3 +1,8 @@
+
+
+<p-dropdown [options]="projects" (onChange)="projectChanged($event)" optionLabel="name"></p-dropdown>
+<p-dropdown [options]="sprints" optionLabel="sprintnumber" (onChange)="sprintChanged($event)"></p-dropdown>
+
 <div *ngIf="project">
   <div class="card">
 
@@ -73,7 +78,7 @@
             <app-activity [for]="'future'" (addWork)="addTask($event, user.futureActivities)"></app-activity>
             <app-activities [activities]="user.futureActivities" [for]="'future'"></app-activities>
           </p-tabPanel>
-          
+
         </p-tabView>
       </ng-template>
     </p-accordionTab>

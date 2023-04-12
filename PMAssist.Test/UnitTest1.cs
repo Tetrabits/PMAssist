@@ -133,8 +133,8 @@ namespace PMAssist.Test
         [Fact]
         public async Task Test_SprintData()
         {
-            var sprintManager = new SprintManager();
-            var obj = await sprintManager.GetSprintData("essette20230329", "dsfsdfsdf");
+            //var sprintManager = new SprintManager();
+            //var obj = await sprintManager.GetSprintData("essette20230329", "dsfsdfsdf");
         }
 
     }

@@ -12,7 +12,11 @@ const PROXY_CONFIG = [
       "/leaveinformation/addevent",
       "/leaveinformation/deleteevent",
       "/leaveinformation/getleaves",
-      "/scrum"
+      "/scrum",
+      "/scrum/getscrumkey",
+      "/scrum/getsprint",
+      "/project",
+      "/project/getscrumkey"
    ],
     target: target,
     secure: false,

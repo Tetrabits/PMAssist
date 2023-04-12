@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Activity } from '../../model/activity';
 import { ScrumService } from '../../shared/services/scrum.service';
+import { ProjectService } from '../../shared/services/project.service';
+
 
 export interface Project {
   name: string;
+  key?: string;
   sprintDuration: number;
   sprintNumber: number;
+  sprints: number[];
   startsOn: Date;
   endsOn: Date;
   duration: number;
@@ -134,15 +138,29 @@ export class DashboardComponent implements OnInit {
 
   project: any;
   progress: number = 0;
+  sprintKey: string='';
+  projects: Project[] = [];
+  selectedProject?: Project[];
+  sprints: number[] = [];
+  constructor(private scrumService: ScrumService, private projectService: ProjectService) {
+       
 
-  constructor(private scrumService: ScrumService) {
-
-    scrumService.getScrumData(new Date().toISOString().replace(/T.*$/, '')).subscribe((data: Project) => {
-      this.project = data;
-      let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);
-      let elapsed = (new Date(this.project.endsOn).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
-      this.progress = Math.ceil((((total - elapsed) / total) * 100));
+    projectService.getProjects().subscribe((data: Project[]) => {
+      this.projects = data;
+      this.sprints = this.projects[0].sprints;
+      scrumService.getScrumDataBySprintNumber('essette', 6).subscribe((data1: any) => {
+        console.log(data1);
+        this.project = data1
+      });
     });
+
+    //scrumService.getScrumData('essette', new Date(2023,2,29).toISOString().replace(/T.*$/, '')).subscribe((data: Project) => {
+    //  console.log(data);
+    //  this.project = data;
+    //  let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);
+    //  let elapsed = (new Date(this.project.endsOn).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
+    //  this.progress = Math.ceil((((total - elapsed) / total) * 100));
+    //});
 
   }
 
@@ -150,6 +168,14 @@ export class DashboardComponent implements OnInit {
 
 
 
+  }
+
+  projectChanged(event: any) {
+    console.log(event);
+  }
+
+  sprintChanged(event: any) {
+    console.log(event);
   }
 
   startDateSelected(event: any) {

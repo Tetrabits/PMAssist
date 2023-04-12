@@ -1,6 +1,9 @@
-﻿using PMAssist.Helpers;
+﻿using Microsoft.AspNetCore.Mvc;
+using PMAssist.Helpers;
 using PMAssist.Interfaces;
 using PMAssist.Models;
+using PMAssist.Models.External;
+using System.Security.Cryptography.Xml;
 using System.Text.Json;
 
 namespace PMAssist.Managers
@@ -29,15 +32,22 @@ namespace PMAssist.Managers
             {
                 var url = UrlHelper.Project.ProjectUrl(projectKey);
 
-                var response = await dataAccess.GetData(string.Empty, url, string.Empty);
+                var response = await dataAccess.GetData(url);
 
                 var project = JsonSerializer.Deserialize<Project>(response);
+
+                if (project is null)
+                {
+                    return string.Empty;
+                }
+
                 var sprint = project.Sprints.FirstOrDefault(n => n.StartsOn <= date && date <= n.EndsOn);
 
                 if (sprint != null)
                 {
-                    return $"{projectKey}{sprint.StartsOn.ToString("yyyyMMdd")}";
+                    return $"{projectKey}{sprint.StartsOn:yyyyMMdd}";
                 }
+
                 return string.Empty;
             });
 
@@ -133,6 +143,51 @@ namespace PMAssist.Managers
             var url = $"{UrlHelper.Utilize.PtoUrl(eventApi.Start, id)}.json";
 
             await dataAccess.DeleteData(eventApi.AuthToken, url);
+        }
+
+        public async Task<IEnumerable<ProjectEx>> GetProjects()
+        {
+            return await Task.Run(async () =>
+            {
+                var url = UrlHelper.Project.ProjectsUrl();
+
+                var response = await dataAccess.GetData(url);
+
+                var projects = JsonSerializer.Deserialize<Dictionary<string, Project>>(response);
+                var projectsEx = new List<ProjectEx>();
+
+                if (projects == null)
+                {
+                    return projectsEx;
+                }
+
+                foreach (var project in projects)
+                {
+                    var projectEx = new ProjectEx
+                    {
+                        ProjectKey = project.Key,
+                        Name = project.Value.Name
+                    };
+
+                    foreach (var sprint in project.Value.Sprints)
+                    {
+                        projectEx.Sprints.Add(sprint);
+                    }
+                    projectsEx.Add(projectEx);
+                }
+
+
+                return projectsEx;
+
+
+
+
+            });
+        }
+
+        internal Task GetSprintKey(string projectKey, short sprintNumber)
+        {
+            throw new NotImplementedException();
         }
     }
 }
