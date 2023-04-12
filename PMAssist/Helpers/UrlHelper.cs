@@ -84,6 +84,38 @@
             {
                 return $"{baseUrl}/{storyKey}/{userKey}/{activityKey}/{activityFiledKey}";
             }
+            public static string SprintActivityUrl(string projectKey, string userKey)
+            {
+                return $"{baseUrl}/{projectKey}/activities/{userKey}";
+            }
+            public static string SprintBugUrl(string projectKey, string userKey)
+            {
+                return $"{baseUrl}/{projectKey}/bugs/{userKey}";
+            }
+        }
+
+        public static class Story
+        {
+            private static string baseUrl = "stories";
+            public static string StoryUrl(string storyKey)
+            {
+                return $"{baseUrl}/{storyKey}";
+            }
+
+            public static string UserUrl(string storyKey, string userKey)
+            {
+                return $"{baseUrl}/{storyKey}/{userKey}";
+            }
+
+            public static string ActivityUrl(string storyKey, string userKey, string activityKey)
+            {
+                return $"{baseUrl}/{storyKey}/{userKey}/{activityKey}";
+            }
+
+            public static string ActivityFieldUrl(string storyKey, string userKey, string activityKey, string activityFiledKey)
+            {
+                return $"{baseUrl}/{storyKey}/{userKey}/{activityKey}/{activityFiledKey}";
+            }
         }
     }
 }
