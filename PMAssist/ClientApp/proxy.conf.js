@@ -13,15 +13,13 @@ const PROXY_CONFIG = [
       "/leaveinformation/deleteevent",
       "/leaveinformation/getleaves",
       "/scrum",
-      "/story",
-      "/story/addactivity"
       "/scrum/getscrumkey",
       "/scrum/getsprint",
+      "/story",
+      "/story/addactivity",
       "/project",
-      "/project/getscrumkey"
-            "/story",
-          "/story/addactivity"
-   ],
+      "/project/getscrumkey",
+    ],
     target: target,
     secure: false,
     headers: {
