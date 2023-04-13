@@ -52,13 +52,22 @@
             {
                 return $"{baseUrl}/{projectKey}.json";
             }
-            public static string SprintActivityUrl(string projectKey, string userKey)
+            public static string SprintActivityUrl(string sprintKey, string userKey, string activityKey)
             {
-                return $"{baseUrl}/{projectKey}/activities/{userKey}";
+                return $"{baseUrl}/{sprintKey}/activities/{userKey}/{activityKey}";
             }
-            public static string SprintBugUrl(string projectKey, string userKey)
+            public static string SprintBugUrl(string sprintKey, string bugKey, string userKey, string activityKey)
             {
-                return $"{baseUrl}/{projectKey}/bugs/{userKey}";
+                return $"{baseUrl}/{sprintKey}/bugs/{bugKey}/{userKey}/{activityKey}";
+            }
+            public static string SprintBugRCAUrl(string sprintKey, string bugKey)
+            {
+                return $"{baseUrl}/{sprintKey}/bugs/{bugKey}/RCA";
+            }
+
+            public static string SprintStoryActivityUrl(string sprintKey, string storyKey, string userKey, string activityKey)
+            {
+                return $"{baseUrl}/{sprintKey}/stories/{storyKey}/{userKey}/{activityKey}";
             }
         }
 

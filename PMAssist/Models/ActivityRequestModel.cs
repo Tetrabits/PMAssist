@@ -10,7 +10,7 @@ namespace PMAssist.Models
         [JsonPropertyName("linkKey")] public string LinkKey { get; set; } = string.Empty;
         [JsonPropertyName("userKey")] public string UserKey { get; set; } = string.Empty;
         [JsonPropertyName("activity")] public ActivityAttributes Activity { get; set; } = new ActivityAttributes();
-        [JsonPropertyName("spentOn")] public DateTime SpentOn { get; set; }
-        [JsonPropertyName("howMuch")] public string HowMuch { get; set; } = string.Empty;
+        [JsonPropertyName("spentOn")] public DateTime SpentOn { get; set; } = DateTime.MinValue;
+        [JsonPropertyName("howMuch")] public int HowMuch { get; set; } = int.MaxValue; 
     }
 }
