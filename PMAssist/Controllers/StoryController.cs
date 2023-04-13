@@ -17,6 +17,7 @@ namespace PMAssist.Controllers
         }
 
         [HttpPost]
+        [Route("addactivity")]
         public async Task<IActionResult> AddActivity(ActivityRequestModel activityRequestModel)
         {
             var storyManager = new StoryManager();
