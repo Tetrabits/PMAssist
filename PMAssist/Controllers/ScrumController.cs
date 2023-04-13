@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PMAssist.Models.External;
-using PMAssist.Models;
-using System.Text.Json;
 using PMAssist.Managers;
+using PMAssist.Helpers;
 
 namespace PMAssist.Controllers
 {
@@ -29,9 +27,40 @@ namespace PMAssist.Controllers
 
             var date = DateTime.Parse(currentDate);
             var result = await projectManager.GetSprintKey(projectKey, date);
-            var content = await sprintManager.GetSprints(result);
+            var content = await sprintManager.GetSprint(result);
             return Ok(content);
             
+        }
+
+        [HttpGet]
+        [Route("getsprintbykey")]
+        public async Task<IActionResult> GetSprintByKey(string projectKey, string sprintKey)
+        {
+
+            var result = await sprintManager.GetSprint(sprintKey);
+            
+            //var result = await projectManager.GetProjects();
+
+            //var project = result.FirstOrDefault(n => n.ProjectKey == projectKey);
+            //if (project == null)
+            //{
+            //    return Ok("");
+            //}
+
+            //var sprint = project.Sprints.FirstOrDefault(n => n.Number == sprintNumber);
+            //var date = sprint.StartsOn.ToString("yyyyMMdd");
+
+            //var sprintKey = $"{projectKey}{date}";
+
+            //var content = await sprintManager.GetSprints(sprintKey);
+
+            //content.Name = project.Name;
+            //content.StartsOn = sprint.StartsOn;
+            //content.EndsOn = sprint.EndsOn;
+
+
+            return Ok(result);
+
         }
 
         [HttpGet]
@@ -47,12 +76,12 @@ namespace PMAssist.Controllers
                 return Ok("");
             }
 
-            var sprint = project.Sprints.FirstOrDefault(n => n.SprintNumber == sprintNumber);
+            var sprint = project.Sprints.FirstOrDefault(n => n.Number == sprintNumber);
             var date = sprint.StartsOn.ToString("yyyyMMdd");
 
             var sprintKey = $"{projectKey}{date}";
 
-            var content = await sprintManager.GetSprints(sprintKey);
+            var content = await sprintManager.GetSprint(sprintKey);
 
             content.Name = project.Name;
             content.StartsOn = sprint.StartsOn;

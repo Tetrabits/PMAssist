@@ -6,13 +6,24 @@ import { ProjectService } from '../../shared/services/project.service';
 
 export interface Project {
   name: string;
-  key?: string;
+  projectKey?: string;
   sprintDuration: number;
   sprintNumber: number;
-  sprints: number[];
+  sprints: sprint[];
   startsOn: Date;
   endsOn: Date;
   duration: number;
+  stories: Story[];
+  bugs: Bug[];
+  users: User[];
+}
+
+export interface sprint {
+  duration: number;
+  key: string;
+  endsOn: Date;
+  number: number;
+  startsOn: Date;
   stories: Story[];
   bugs: Bug[];
   users: User[];
@@ -39,10 +50,7 @@ export interface Effort {
   burntOn: Date;
   howMuch: number;
 }
-export interface Story {
-  id: string;
-  points: number;
-}
+
 export interface Work {
   howMuch: number;
 }
@@ -138,19 +146,32 @@ export class DashboardComponent implements OnInit {
 
   project: any;
   progress: number = 0;
-  sprintKey: string='';
+  sprintKey: string = '';
   projects: Project[] = [];
-  selectedProject?: Project[];
-  sprints: number[] = [];
-  constructor(private scrumService: ScrumService, private projectService: ProjectService) {
-       
+  selectedProject?: Project;
+  sprints: sprint[] = [];
 
-    projectService.getProjects().subscribe((data: Project[]) => {
+
+  constructor(private scrumService: ScrumService, private projectService: ProjectService) {
+
+
+    projectService.getProjects().subscribe((data: Project[]) => {      
       this.projects = data;
-      this.sprints = this.projects[0].sprints;
-      scrumService.getScrumDataBySprintNumber('essette', 6).subscribe((data1: any) => {
-        console.log(data1);
-        this.project = data1
+      this.selectedProject = this.projects[0];
+      this.sprints = this.selectedProject.sprints;
+
+      //scrumService.getScrumDataBySprintNumber('essette', 6).subscribe((data1: any) => {
+      //  this.project = data1
+      //});
+      //console.log(this.sprints[0].startson.toISOString());
+      console.log(this.projects[0].sprints[0]);
+      console.log(this.sprints[0].key);
+      scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', this.sprints[0].key).subscribe((data: Project) => {
+        console.log(data);
+        this.project = data;
+        let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);
+        let elapsed = (new Date(this.project.endsOn).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
+        this.progress = Math.ceil((((total - elapsed) / total) * 100));
       });
     });
 
@@ -203,19 +224,19 @@ export class DashboardComponent implements OnInit {
   closeDay(user: User) {
 
     let pendingActivities = user.yesterdayActivities.filter(this.pendingActivities)
-  
+
     pendingActivities.forEach(function (value) {
       user.activities.splice(0, 0, value);
     });
 
     //remove the not completed items from yesterday's activites 
-    for (let i = user.yesterdayActivities.length - 1; i>-1; i--) {
+    for (let i = user.yesterdayActivities.length - 1; i > -1; i--) {
       if (user.yesterdayActivities[i].status !== 'Completed') {
         user.yesterdayActivities.splice(i, 1);
       }
     }
 
-    
+
   }
 
   effort(activities: Activity[]): number {
@@ -262,5 +283,5 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  
+
 }

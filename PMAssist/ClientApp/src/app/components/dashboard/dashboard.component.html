@@ -1,7 +1,7 @@
 
 
 <p-dropdown [options]="projects" (onChange)="projectChanged($event)" optionLabel="name"></p-dropdown>
-<p-dropdown [options]="sprints" optionLabel="sprintnumber" (onChange)="sprintChanged($event)"></p-dropdown>
+<p-dropdown [options]="sprints" optionLabel="number" (onChange)="sprintChanged($event)"></p-dropdown>
 
 <div *ngIf="project">
   <div class="card">

@@ -6,9 +6,9 @@ namespace PMAssist.Models
     {
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
-        [JsonPropertyName("sprintduration")]
+        [JsonPropertyName("sprintDuration")]
         public short SprintDuration { get; set; } = 14;
         [JsonPropertyName("sprints")]
-        public IEnumerable<Sprint> Sprints { get; set; } = new List<Sprint>();
+        public Dictionary<string, Sprint> Sprints { get; set; } = new Dictionary<string, Sprint>();
     }
 }

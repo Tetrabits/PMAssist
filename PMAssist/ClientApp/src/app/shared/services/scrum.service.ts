@@ -17,4 +17,8 @@ export class ScrumService {
   getScrumDataBySprintNumber(projectKey: string, sprintNumber: number): Observable<Project> {
     return this.http.get<Project>(this.baseUrl + 'scrum/getsprint/?projectKey=' + projectKey + '&&sprintNumber=' + sprintNumber);
   }
+  //GetSprintByKey
+  getScrumDataBySprintKey(projectKey: string, sprintNumber: string): Observable<Project> {
+    return this.http.get<Project>(this.baseUrl + 'scrum/getsprintbykey/?projectKey=' + projectKey + '&&sprintKey=' + sprintNumber);
+  }
 }
