@@ -19,12 +19,13 @@ export interface Project {
 }
 
 export interface sprint {
-  bugs: Bug[];
   duration: number;
-  endson: Date;
-  sprintnumber: number;
-  startson: Date;
+  key: string;
+  endsOn: Date;
+  number: number;
+  startsOn: Date;
   stories: Story[];
+  bugs: Bug[];
   users: User[];
 }
 
@@ -154,16 +155,18 @@ export class DashboardComponent implements OnInit {
   constructor(private scrumService: ScrumService, private projectService: ProjectService) {
 
 
-    projectService.getProjects().subscribe((data: Project[]) => {
+    projectService.getProjects().subscribe((data: Project[]) => {      
       this.projects = data;
       this.selectedProject = this.projects[0];
       this.sprints = this.selectedProject.sprints;
+
       //scrumService.getScrumDataBySprintNumber('essette', 6).subscribe((data1: any) => {
       //  this.project = data1
       //});
       //console.log(this.sprints[0].startson.toISOString());
-      console.log(this.selectedProject.projectKey);
-      scrumService.getScrumData(this.selectedProject?.projectKey || '', new Date(2023, 2, 29).toISOString().replace(/T.*$/, '')).subscribe((data: Project) => {
+      console.log(this.projects[0].sprints[0]);
+      console.log(this.sprints[0].key);
+      scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', this.sprints[0].key).subscribe((data: Project) => {
         console.log(data);
         this.project = data;
         let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);

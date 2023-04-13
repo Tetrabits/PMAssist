@@ -24,7 +24,7 @@ namespace PMAssist.Models
         [JsonPropertyName("actual")]
         public int Actual { get; set; }//: Sum of Actuls
         [JsonPropertyName("actuals")]
-        public List<Effort> Actuals { get; set; } = new List<Effort>(); //: [Date, number] Actual recorded each day
+        public Dictionary<string, int> Actuals { get; set; } = new();  //: [Date, number] Actual recorded each day
         [JsonPropertyName("status")]
         public string Status { get; set; } = string.Empty;//: [Planned, In Progress, Closed]
     }

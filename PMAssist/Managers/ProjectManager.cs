@@ -41,12 +41,12 @@ namespace PMAssist.Managers
                     return string.Empty;
                 }
 
-                var sprint = project.Sprints.FirstOrDefault(n => n.StartsOn <= date && date <= n.EndsOn);
+                //var sprint = project.Sprints.FirstOrDefault(n => n.StartsOn <= date && date <= n.EndsOn);
 
-                if (sprint != null)
-                {
-                    return $"{projectKey}{sprint.StartsOn:yyyyMMdd}";
-                }
+                //if (sprint != null)
+                //{
+                //    return $"{projectKey}{sprint.StartsOn:yyyyMMdd}";
+                //}
 
                 return string.Empty;
             });
@@ -62,17 +62,17 @@ namespace PMAssist.Managers
                 var response = await dataAccess.GetData(string.Empty, url, string.Empty);
 
                 var project = JsonSerializer.Deserialize<Project>(response);
-                var sprintIndex = project.Sprints.Count();
+                //var sprintIndex = project.Sprints.Count();
 
 
-                url = $"{url}/sprints/{sprintIndex}.json";
+                //url = $"{url}/sprints/{sprintIndex}.json";
 
-                var x = await dataAccess.PutData(string.Empty, url, JsonSerializer.Serialize(sprint));
+                //var x = await dataAccess.PutData(string.Empty, url, JsonSerializer.Serialize(sprint));
 
-                if (sprint != null)
-                {
-                    return $"{projectKey}{sprint.StartsOn.ToString("yyyyMMdd")}";
-                }
+                //if (sprint != null)
+                //{
+                //    return $"{projectKey}{sprint.StartsOn.ToString("yyyyMMdd")}";
+                //}
                 return string.Empty;
             });
 
@@ -171,7 +171,8 @@ namespace PMAssist.Managers
 
                     foreach (var sprint in project.Value.Sprints)
                     {
-                        projectEx.Sprints.Add(sprint);
+                        sprint.Value.Key = sprint.Key;
+                        projectEx.Sprints.Add(sprint.Value);
                     }
                     projectsEx.Add(projectEx);
                 }
