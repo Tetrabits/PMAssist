@@ -26,9 +26,12 @@ namespace PMAssist.Controllers
         }
 
         [HttpPost]
-        public async Task UpdateActivity(ActivityRequestModel activityRequestModel)
+        [Route("updateactivity")]
+        public async Task<IActionResult> UpdateActivity(ActivityRequestModel activityRequestModel)
         {
-            Ok();
+            var storyManager = new StoryManager();
+            await storyManager.UpdateActivity(activityRequestModel);
+            return Ok();
         }
 
         [HttpPost]

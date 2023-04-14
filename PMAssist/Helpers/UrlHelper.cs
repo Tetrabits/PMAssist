@@ -56,9 +56,25 @@
             {
                 return $"{baseUrl}/{sprintKey}/activities/{userKey}/{activityKey}";
             }
+            public static string SprintActivityActualsUrl(string sprintKey, string userKey, string activityKey)
+            {
+                return $"{baseUrl}/{sprintKey}/activities/{userKey}/{activityKey}/actuals";
+            }
+            public static string SprintActivityStatusUrl(string sprintKey, string userKey, string activityKey)
+            {
+                return $"{baseUrl}/{sprintKey}/activities/{userKey}/{activityKey}/status";
+            }
             public static string SprintBugUrl(string sprintKey, string bugKey, string userKey, string activityKey)
             {
                 return $"{baseUrl}/{sprintKey}/bugs/{bugKey}/{userKey}/{activityKey}";
+            }
+            public static string SprintBugActualsUrl(string sprintKey, string bugKey, string userKey, string activityKey)
+            {
+                return $"{baseUrl}/{sprintKey}/bugs/{bugKey}/{userKey}/{activityKey}/actuals";
+            }
+            public static string SprintBugStatusUrl(string sprintKey, string bugKey, string userKey, string activityKey)
+            {
+                return $"{baseUrl}/{sprintKey}/bugs/{bugKey}/{userKey}/{activityKey}/status";
             }
             public static string SprintBugRCAUrl(string sprintKey, string bugKey)
             {
@@ -68,6 +84,14 @@
             public static string SprintStoryActivityUrl(string sprintKey, string storyKey, string userKey, string activityKey)
             {
                 return $"{baseUrl}/{sprintKey}/stories/{storyKey}/{userKey}/{activityKey}";
+            }
+            public static string SprintStoryActivityActualsUrl(string sprintKey, string storyKey, string userKey, string activityKey)
+            {
+                return $"{baseUrl}/{sprintKey}/stories/{storyKey}/{userKey}/{activityKey}/actuals";
+            }
+            public static string SprintStoryActivityStatusUrl(string sprintKey, string storyKey, string userKey, string activityKey)
+            {
+                return $"{baseUrl}/{sprintKey}/stories/{storyKey}/{userKey}/{activityKey}/status";
             }
         }
 
