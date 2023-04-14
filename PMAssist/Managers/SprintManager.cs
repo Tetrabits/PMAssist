@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PMAssist.Adaptors;
 using PMAssist.Helpers;
 using PMAssist.Interfaces;
 using PMAssist.Models;
@@ -27,12 +28,15 @@ namespace PMAssist.Managers
 
         public async Task<ProjectEx> GetSprint(string sprintKey)
         {
-            var url = UrlHelper.Sprint.SprintUrl(sprintKey);
-
+            var url = UrlHelper.Sprint.SprintUrl(sprintKey);            
             var content = await dataAccess.GetData(url);
+
             try
             {
-                var sprint = JsonSerializer.Deserialize<Sprint>(content);
+                var sprint = JsonSerializer.Deserialize<Sprint>(content)??new Sprint();
+                var sprintAdaptor = new SprintAdaptor();
+                var projectEx = sprintAdaptor.Adapt(sprint);
+                return projectEx;
             }
             catch (Exception ex )
             {
@@ -41,7 +45,7 @@ namespace PMAssist.Managers
             }
             
 
-            var projectEx = new ProjectEx();
+            
 
             //foreach (var storyKey in sprint.Stories)
             //{
@@ -85,7 +89,7 @@ namespace PMAssist.Managers
             //}
 
 
-            return projectEx;
+            
         }
 
 

@@ -3,6 +3,27 @@
 
     public class ActivityEx
     {
+        public ActivityEx() { }
+        public ActivityEx(Activity activity) 
+        {
+            Actual = 0;
+            Client = activity.Client;
+            CreatedOn = activity.CreatedOn;
+            Id = activity.ID;
+            LinkID = activity.LinkID;
+            Plan = activity.Plan;
+            Status = activity.Status;
+            TotalSpent = activity.Actuals.Sum(n => n.Value);
+            Type = activity.Type;
+            ClosedOn = activity.ClosedOn;
+            What = activity.What;
+        }
+
+        public ActivityEx(Activity activity, string linkId):this(activity)
+        {
+            LinkID = linkId;            
+        }
+
         public DateTime CreatedOn { get; set; }
         public DateTime ClosedOn { get; set; }
         public string Id { get; set; } = string.Empty;
