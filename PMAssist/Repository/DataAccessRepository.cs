@@ -22,6 +22,17 @@ namespace PMAssist
             return result;
 
         }
+        
+        public async Task<string> GetData(string url)
+        {
+            using var client = new HttpClient();
+            string geturl = BaseUrl + url;
+
+            var response = await client.GetAsync(geturl);
+            string result = await response.Content.ReadAsStringAsync();
+            //Console.WriteLine(result);
+            return result;
+        }
 
         public async Task<string> GetData(string token, string url, string uid)
         {
