@@ -27,7 +27,7 @@ namespace PMAssist.Controllers
 
             var date = DateTime.Parse(currentDate);
             var result = await projectManager.GetSprintKey(projectKey, date);
-            var content = await sprintManager.GetSprint(result);
+            var content = await sprintManager.GetSprint(result, new Models.External.ProjectEx());
             return Ok(content);
             
         }
@@ -36,28 +36,10 @@ namespace PMAssist.Controllers
         [Route("getsprintbykey")]
         public async Task<IActionResult> GetSprintByKey(string projectKey, string sprintKey)
         {
+            var projects = await projectManager.GetProjects();
+            var project = projects.FirstOrDefault(n => n.ProjectKey == projectKey)??new Models.External.ProjectEx();
 
-            var result = await sprintManager.GetSprint(sprintKey);
-            
-            //var result = await projectManager.GetProjects();
-
-            //var project = result.FirstOrDefault(n => n.ProjectKey == projectKey);
-            //if (project == null)
-            //{
-            //    return Ok("");
-            //}
-
-            //var sprint = project.Sprints.FirstOrDefault(n => n.Number == sprintNumber);
-            //var date = sprint.StartsOn.ToString("yyyyMMdd");
-
-            //var sprintKey = $"{projectKey}{date}";
-
-            //var content = await sprintManager.GetSprints(sprintKey);
-
-            //content.Name = project.Name;
-            //content.StartsOn = sprint.StartsOn;
-            //content.EndsOn = sprint.EndsOn;
-
+            var result = await sprintManager.GetSprint(sprintKey, project);
 
             return Ok(result);
 
@@ -81,7 +63,7 @@ namespace PMAssist.Controllers
 
             var sprintKey = $"{projectKey}{date}";
 
-            var content = await sprintManager.GetSprint(sprintKey);
+            var content = await sprintManager.GetSprint(sprintKey, new Models.External.ProjectEx());
 
             content.Name = project.Name;
             content.StartsOn = sprint.StartsOn;

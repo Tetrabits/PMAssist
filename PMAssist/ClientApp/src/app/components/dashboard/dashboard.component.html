@@ -1,13 +1,20 @@
-
-
-<p-dropdown [options]="projects" (onChange)="projectChanged($event)" optionLabel="name"></p-dropdown>
-<p-dropdown [options]="sprints" optionLabel="number" (onChange)="sprintChanged($event)"></p-dropdown>
+<div class="flex flex-row flex-wrap card-container blue-container">
+  <div class="flex align-items-center justify-content-center mr-1 mb-1">
+    <p-dropdown [options]="projects" (onChange)="projectChanged($event)" optionLabel="name"></p-dropdown>
+  </div>
+  <div class="flex align-items-center justify-content-center ml-1 mb-1">
+    <p-dropdown [options]="sprints" optionLabel="number" (onChange)="sprintChanged($event)"></p-dropdown>
+  </div>
+</div>
 
 <div *ngIf="project">
-  <div class="card">
+  <div class="card mb-1">
 
     <div class="flex ">
-      <div class="flex-grow-1 align-items-center justify-content-center text-3xl font-bold bg-secondary border-round-top-sm px-2">{{project.name}} - Sprint {{project?.sprintNumber}}</div>
+      <div class="flex-grow-1 align-items-center justify-content-center text-3xl font-bold bg-secondary border-round-top-sm px-2">
+        {{project.name}} - Sprint {{project?.sprintNumber}}
+        <i *ngIf="progress===100" class="pi pi-lock text-red-500" style="font-size:1.5rem"></i>
+      </div>
     </div>
 
     <div class="flex card-container blue-container overflow-hidden">
