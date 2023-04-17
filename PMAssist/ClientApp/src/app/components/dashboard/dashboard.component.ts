@@ -155,7 +155,20 @@ export class DashboardComponent implements OnInit {
   constructor(private scrumService: ScrumService, private projectService: ProjectService) {
 
 
-    projectService.getProjects().subscribe((data: Project[]) => {      
+    projectService.getProjects().subscribe((data: Project[]) => {
+      console.log(data);
+
+      let today = new Date();
+      console.log(today);
+
+      let currentSprint = data[0].sprints.find(n => n.startsOn <= today && today <= n.endsOn)
+      console.log(currentSprint);
+
+      if (currentSprint === undefined)
+      {
+        currentSprint = data[0].sprints[data[0].sprints.length -1]
+      }
+      console.log(currentSprint);
       this.projects = data;
       this.selectedProject = this.projects[0];
       this.sprints = this.selectedProject.sprints;
@@ -164,10 +177,9 @@ export class DashboardComponent implements OnInit {
       //  this.project = data1
       //});
       //console.log(this.sprints[0].startson.toISOString());
-      console.log(this.projects[0].sprints[0]);
-      console.log(this.sprints[0].key);
-      scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', this.sprints[0].key).subscribe((data: Project) => {
-        console.log(data);
+
+      scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', currentSprint?.key ||'').subscribe((data: Project) => {
+        
         this.project = data;
         let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);
         let elapsed = (new Date(this.project.endsOn).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
