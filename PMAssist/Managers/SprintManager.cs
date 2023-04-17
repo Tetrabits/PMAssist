@@ -26,7 +26,7 @@ namespace PMAssist.Managers
             dataAccess = new DataAccessRepository();
         }
 
-        public async Task<ProjectEx> GetSprint(string sprintKey)
+        public async Task<ProjectEx> GetSprint(string sprintKey, ProjectEx project)
         {
             var url = UrlHelper.Sprint.SprintUrl(sprintKey);            
             var content = await dataAccess.GetData(url);
@@ -36,6 +36,13 @@ namespace PMAssist.Managers
                 var sprint = JsonSerializer.Deserialize<Sprint>(content)??new Sprint();
                 var sprintAdaptor = new SprintAdaptor();
                 var projectEx = sprintAdaptor.Adapt(sprint);
+                sprint = project.Sprints.FirstOrDefault(n => n.Key == sprintKey)?? new Sprint();
+                projectEx.SprintNumber = sprint.Number;
+                projectEx.SprintDuration = sprint.Duration;
+                projectEx.Duration = project.Duration;
+                projectEx.Name = project.Name;
+                projectEx.StartsOn = sprint.StartsOn;
+                projectEx.EndsOn = sprint.EndsOn;
                 return projectEx;
             }
             catch (Exception ex )
