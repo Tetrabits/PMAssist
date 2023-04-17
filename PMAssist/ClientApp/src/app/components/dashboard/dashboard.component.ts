@@ -171,7 +171,11 @@ export class DashboardComponent implements OnInit {
         this.project = data;
         let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);
         let elapsed = (new Date(this.project.endsOn).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
-        this.progress = Math.ceil((((total - elapsed) / total) * 100));
+        let progress = Math.ceil((((total - elapsed) / total) * 100));
+        if (progress > 99) {
+          progress = 100;
+        }
+        this.progress = progress;
       });
     });
 
@@ -197,6 +201,17 @@ export class DashboardComponent implements OnInit {
 
   sprintChanged(event: any) {
     console.log(event);
+    this.scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', event.value.key).subscribe((data: Project) => {
+      console.log(data);
+      this.project = data;
+      let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);
+      let elapsed = (new Date(this.project.endsOn).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
+      let progress = Math.ceil((((total - elapsed) / total) * 100));
+      if (progress > 99) {
+        progress = 100;
+      }
+      this.progress = progress;
+    });
   }
 
   startDateSelected(event: any) {
