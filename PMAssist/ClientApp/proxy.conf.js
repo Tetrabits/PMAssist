@@ -21,6 +21,7 @@ const PROXY_CONFIG = [
       "/story/updateactivity",
       "/project",
       "/project/getscrumkey",
+      "/user"
     ],
     target: target,
     secure: false,

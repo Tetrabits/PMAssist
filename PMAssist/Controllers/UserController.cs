@@ -1,22 +1,35 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PMAssist.Interfaces;
 
 namespace PMAssist.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> logger;
+        protected IUserManager UserManager;
 
-        public UserController(ILogger<UserController> logger)
+        public UserController(ILogger<UserController> logger, IUserManager userManager)
         {
             this.logger = logger;
+            this.UserManager = userManager;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok("");
+            try
+            {
+                var users = await UserManager.GetUsers();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+            
 
         }
     }

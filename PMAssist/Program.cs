@@ -1,7 +1,10 @@
+using PMAssist.Interfaces;
+using PMAssist.Managers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddSingleton<IUserManager, UserManager>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
