@@ -1,11 +1,10 @@
 ﻿using PMAssist.Interfaces;
 using PMAssist.Models;
-using System;
 using System.Text.Json;
 
 namespace PMAssist.Managers
 {
-    public class UserManager
+    public class UserManager : IUserManager
     {
         private static IDataAccessRepository dataAccess;
         private static readonly string URL = @"users";
@@ -15,6 +14,7 @@ namespace PMAssist.Managers
         {
             dataAccess = dataAccessRepository;
         }
+
         public UserManager()
         {
 
@@ -27,27 +27,27 @@ namespace PMAssist.Managers
             Users = new List<UserModel>();
 
             var userData = dataAccess.GetAll("asdfsdf", URL).GetAwaiter().GetResult();
-            var rawData = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string,string>>>(userData);
+            var rawData = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(userData);
 
-            foreach(var data in rawData) 
+            foreach (var data in rawData)
             {
                 Users.Add(new UserModel
                 {
                     UID = data.Key,
                     Name = data.Value["name"],
-                    Status = data.Value["active"]=="true"
+                    Status = data.Value["active"] == "true"
                 });
-                
+
             }
 
         }
 
-        public static async Task<UserModel> GetUser(string userId)
+        public async Task<UserModel> GetUser(string userId)
         {
             return await Task.Run(() =>
             {
                 var user = Users.FirstOrDefault(n => n.UID == userId);
-                if ( user is not null)
+                if (user is not null)
                 {
                     return user;
                 }
@@ -57,18 +57,14 @@ namespace PMAssist.Managers
                 }
             });
 
-            //var url = $"{URL}/{userId}";
+        }
 
-            //var userData = await dataAccess.GetAll("asdfsdf", url);
-
-            //var rawData = JsonSerializer.Deserialize<Dictionary<string, string>>(userData);
-
-            //if (rawData == null)
-            //{
-            //    return new UserModel { Name = "Not Defined" };
-            //}
-
-            //return new UserModel { Name = rawData["name"] };
+        public Task<IEnumerable<UserModel>> GetUsers()
+        {
+            return Task.Run(() =>
+            {
+                return Users.AsEnumerable();
+            });
         }
     }
 }

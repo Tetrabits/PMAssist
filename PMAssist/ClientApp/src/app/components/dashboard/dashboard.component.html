@@ -8,24 +8,55 @@
 </div>
 
 <div *ngIf="project">
-  <div class="card mb-1">
 
-    <div class="flex ">
-      <div class="flex-grow-1 align-items-center justify-content-center text-3xl font-bold bg-secondary border-round-top-sm px-2">
-        {{project.name}} - Sprint {{project?.sprintNumber}}
-        <i *ngIf="progress===100" class="pi pi-lock text-red-500" style="font-size:1.5rem"></i>
-      </div>
+  <div class="flex border-round-top-sm px-2 py-2">
+    <div class="flex flex-grow-1 text-3xl font-bold ">
+      {{project.name}} - Sprint {{project?.sprintNumber}}
+      <i *ngIf="progress===100" class="pi pi-lock text-red-500" style="font-size:1.5rem"></i>
     </div>
-
-    <div class="flex card-container blue-container overflow-hidden">
-      <div class="flex-none flex align-items-center justify-content-center bg-primary m-2 px-2 border-1 border-round">{{project.startsOn|date}}</div>
-      <div class="flex-grow-1 align-items-center justify-content-center m-2 border-round"><p-progressBar [value]="progress"></p-progressBar></div>
-      <div class="flex-none flex align-items-center justify-content-center bg-primary m-2 px-2 border-1 border-round">{{project.endsOn|date}}</div>
+    <div class="flex flex-grow">
+      <p-button label="Close Sprint" icon="pi pi-lock" iconPos="right" styleClass="p-button-sm"></p-button>
     </div>
-
   </div>
+
+  <div class="flex card-container blue-container overflow-hidden mb-1">
+    <div class="flex flex-none  align-items-center justify-content-center bg-primary mr-1 px-2 border-round">{{project.startsOn|date}}</div>
+    <div class="flex-grow-1 align-items-center justify-content-center ml-1 mr-1 border-round"><p-progressBar [value]="progress"></p-progressBar></div>
+    <div class="flex flex-none  align-items-center justify-content-center bg-primary ml-1 mr-1 px-2 border-round">{{project.endsOn|date}}</div>
+  </div>
+
   <p-accordion [activeIndex]="1">
     <p-accordionTab header="Plan">
+
+      <div class="flex overflow-hidden">
+        <div class="flex flex-none align-items-center  justify-content-center px-1">
+          <p-dropdown appendTo="body" class="w-full" placeholder="Type" optionLabel="name" [showClear]="true">
+          </p-dropdown>
+        </div>
+
+        <div class="flex flex-none align-items-center  justify-content-center px-1">
+          <p-dropdown appendTo="body" class="w-full" placeholder="User" optionLabel="name" [showClear]="true">
+          </p-dropdown>
+        </div>
+        <div class="flex-grow-1 flex align-items-center justify-content-center px-1">
+          <input class="w-full" type="text" pInputText placeholder="What" />
+        </div>
+
+        <div class="flex align-items-center justify-content-center px-1" style="flex: 0 0 100px">
+          <input class="w-full" type="text" pInputText placeholder="User Story/Bug" />
+        </div>
+
+
+        <div class="flex align-items-center justify-content-center px-1" style="flex: 0 0 50px">
+          <p-inputNumber [inputStyle]="{'width':'60px','text-align':'right'}" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="99.99" placeholder="Plan"> </p-inputNumber>
+        </div>
+        <!--<div class="flex flex-none align-items-center justify-content-center px-1">
+    <p-inputNumber [inputStyle]="{'width':'60px','text-align':'right'}" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="99.99" placeholder="Actual"> </p-inputNumber>
+  </div>-->
+        <div class="flex-none flex align-items-center justify-content-center pl-1 pr-2 py-2">
+          <p-button icon="pi pi-plus"></p-button>
+        </div>
+      </div>
 
       <div class="flex flex-row flex-wrap card-container blue-container">
         <div class="flex align-items-center justify-content-center card border-round m-2">
