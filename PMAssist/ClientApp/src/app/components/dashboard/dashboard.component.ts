@@ -55,16 +55,6 @@ export interface Work {
   howMuch: number;
 }
 
-//export interface Activity {
-//  what: string;
-//  work: Work[];
-//}
-
-//export interface User {
-//  headers: string[];
-//  details: Activity[]
-//}
-
 export interface EffortCategory {
   id: number;
   name: string;
@@ -81,69 +71,7 @@ interface TaskType {
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-
-  //project: Project =
-  //  {
-  //    name: 'Essete Upgrade 4.8',
-  //    sprintDuration: 14,
-  //    sprintNumber: 7,
-  //    startsOn: new Date(),
-  //    endsOn: new Date(),
-  //    duration: 14,
-  //    stories: [{ id: "US5589505", points: 2 },
-  //    { id: "US5593556", points: 2 },
-  //    { id: "US5593652", points: 2 },
-  //    { id: "US5593680", points: 2 },
-  //    { id: "US5527284", points: 2 },
-  //    { id: "US5593850", points: 2 },
-  //    { id: "US5593862", points: 2 },
-  //    { id: "US5593897", points: 2 },
-  //    { id: "US5593821", points: 2 },
-  //    { id: "US5593924", points: 2 },
-  //    { id: "US5593967", points: 2 }],
-  //    bugs: [{ id: 'Bug 1', rca: 'Requirements missing' }],
-  //    users: [
-  //      {
-  //        name: 'Gajanan Tuppad', yesterdayActivities: [
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589928", what: "", type: "Code Review", client: true, status: "Planned", "plan": 0.5, "totalSpent": 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590199", what: "", type: "Code Review", client: true, status: "Planned", "plan": 0.5, "totalSpent": 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590637", what: "", type: "Code Review", client: true, status: "Planned", "plan": 0.5, "totalSpent": 4, "actual": 0 }
-  //        ], activities: [], futureActivities: []
-  //      },
-  //      {
-  //        name: 'Rushikesh Thakare', yesterdayActivities: [
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590197", what: "", type: "Analysis",  client: true, status:"Completed", plan: 2, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590197", what: "", type: "Development",  client: true, status:"Completed", plan: 1, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589502", what: "", type: "Analysis",  client: true, status:"Completed", plan: 2, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589502", what: "", type: "Development",  client: true, status:"Completed", plan: 1, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589505", what: "", type: "Analysis",  client: true, status:"Completed", plan: 2, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589505", what: "", type: "Development",  client: true, status:"Completed", plan: 1, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593556", what: "", type: "Analysis",  client: true, status:"Planned", plan: 2, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593556", what: "", type: "Development",  client: true, status:"Planned", plan: 1, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593652", what: "", type: "Analysis",  client: true, status:"Planned", plan: 2, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593652", what: "", type: "Development",  client: true, status:"Planned", plan: 1, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593680", what: "", type: "Analysis",  client: true, status:"Planned", plan: 2, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593680", what: "", type: "Development",  client: true, status:"Planned", plan: 1, totalSpent: 4, "actual": 0 }
-  //        ], activities: [], futureActivities: []
-  //      },
-  //      {
-  //        name: 'Madhu Gurukar', yesterdayActivities: [
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589928", what: "", "type": "Analysis",  client: true, status: "Planned", plan: 2, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589928", what: "", "type": "Development",  client: true, status: "Planned", plan: 1, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590199", what: "", "type": "Analysis",  client: true, status: "Planned", plan: 2, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590199", what: "", "type": "Development",  client: true, status: "Planned", plan: 1, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593026", what: "", "type": "Analysis",  client: true, status: "Planned", plan: 2, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590637", what: "", "type": "Development",  client: true, status: "Planned", plan: 1, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5590197", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589502", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5589505", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593556", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593652", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 },
-  //          { createdOn: new Date(), closedOn: new Date(), id: '', linkID: "US5593680", what: "", "type": "Code Review",  client: true, status: "Planned", plan: 0.5, totalSpent: 4, "actual": 0 }
-  //        ], activities: [], futureActivities: []
-  //      }],
-  //  };
-
+   
   project: any;
   progress: number = 0;
   sprintKey: string = '';
@@ -173,11 +101,6 @@ export class DashboardComponent implements OnInit {
       this.selectedProject = this.projects[0];
       this.sprints = this.selectedProject.sprints;
 
-      //scrumService.getScrumDataBySprintNumber('essette', 6).subscribe((data1: any) => {
-      //  this.project = data1
-      //});
-      //console.log(this.sprints[0].startson.toISOString());
-
       scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', currentSprint?.key ||'').subscribe((data: Project) => {
         
         this.project = data;
@@ -191,19 +114,9 @@ export class DashboardComponent implements OnInit {
       });
     });
 
-    //scrumService.getScrumData('essette', new Date(2023,2,29).toISOString().replace(/T.*$/, '')).subscribe((data: Project) => {
-    //  console.log(data);
-    //  this.project = data;
-    //  let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);
-    //  let elapsed = (new Date(this.project.endsOn).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
-    //  this.progress = Math.ceil((((total - elapsed) / total) * 100));
-    //});
-
   }
 
-  ngOnInit(): void {
-
-
+  ngOnInit(): void {    
 
   }
 
