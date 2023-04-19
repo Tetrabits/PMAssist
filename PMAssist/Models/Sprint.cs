@@ -19,7 +19,7 @@ namespace PMAssist.Models
         [JsonPropertyName("activities")]
         public Dictionary<string, Dictionary<string, Activity>> Activities { get; set; } = new();
         [JsonPropertyName("stories")]
-        public Dictionary<string, Dictionary<string, Dictionary<string, Activity>>> Stories { get; set; } = new();
+        public Dictionary<string, Story> Stories { get; set; } = new();
 
     }
 }
