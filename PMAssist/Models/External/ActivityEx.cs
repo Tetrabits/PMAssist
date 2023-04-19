@@ -4,7 +4,7 @@
     public class ActivityEx
     {
         public ActivityEx() { }
-        public ActivityEx(Activity activity) 
+        public ActivityEx(string activityKey, Activity activity) 
         {
             Actual = 0;
             Client = activity.Client;
@@ -19,7 +19,7 @@
             What = activity.What;
         }
 
-        public ActivityEx(Activity activity, string linkId):this(activity)
+        public ActivityEx(string activityKey, Activity activity, string linkId):this(activityKey, activity)
         {
             LinkID = linkId;            
         }

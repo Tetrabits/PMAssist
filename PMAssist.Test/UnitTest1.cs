@@ -1,6 +1,7 @@
 using PMAssist.Adaptors;
 using PMAssist.Managers;
 using PMAssist.Models;
+using System.Security.Cryptography.Xml;
 using System.Text.Json;
 
 namespace PMAssist.Test
@@ -168,5 +169,60 @@ namespace PMAssist.Test
             //var obj = await sprintManager.GetSprintData("essette20230329", "dsfsdfsdf");
         }
 
+
+        class Story1
+        {
+            public string Status { get; set; } = string.Empty;
+            public short StoryPoint { get; set; } = 0;
+            public Dictionary<string, Dictionary<string, Activity>> Users { get; set; } = new Dictionary<string, Dictionary<string, Activity>>();
+        }
+
+        [Fact]
+        public async Task DeserializeSprintData1()
+        {
+
+            var x = "{\"US5589502\":{\"dIUfOTwVrrRe4lcowYEmxbSTg9L2\":{\"670c6a91-4b41-46a8-830c-491c52a367cf\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"670c6a91-4b41-46a8-830c-491c52a367cf\",\"plan\":0.5,\"status\":\"Planned\",\"type\":\"Code Review\",\"what\":\"\"}},\"ohN33v6NBhVv3EA0VjCkLeX5iRG2\":{\"13517e71-1bce-4d77-8221-21c6aece43a7\":{\"actuals\":{\"20230406\":2},\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"13517e71-1bce-4d77-8221-21c6aece43a7\",\"plan\":2,\"status\":\"Completed\",\"type\":\"Analysis\",\"what\":\"\"},\"7753ba05-5b49-4156-8a2e-9c22f677627a\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"7753ba05-5b49-4156-8a2e-9c22f677627a\",\"plan\":1,\"status\":\"Completed\",\"type\":\"Development\",\"what\":\"\"}}},\"US5589505\":{\"dIUfOTwVrrRe4lcowYEmxbSTg9L2\":{\"abac03b5-ac80-426a-8d24-544859f97d07\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"abac03b5-ac80-426a-8d24-544859f97d07\",\"plan\":0.5,\"status\":\"Planned\",\"type\":\"Code Review\",\"what\":\"\"}},\"ohN33v6NBhVv3EA0VjCkLeX5iRG2\":{\"26a976da-ce24-46e6-84ea-22272cd25a52\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"26a976da-ce24-46e6-84ea-22272cd25a52\",\"plan\":1,\"status\":\"Completed\",\"type\":\"Development\",\"what\":\"\"},\"571af33c-a937-467b-a900-a0a3f4d336f7\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"571af33c-a937-467b-a900-a0a3f4d336f7\",\"plan\":2,\"status\":\"Completed\",\"type\":\"Analysis\",\"what\":\"\"}}},\"US5589928\":{\"dIUfOTwVrrRe4lcowYEmxbSTg9L2\":{\"132e6a7d-5826-4d86-b894-eafdbfe5d412\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"132e6a7d-5826-4d86-b894-eafdbfe5d412\",\"plan\":2,\"status\":\"Planned\",\"type\":\"Analysis\",\"what\":\"\"},\"490889fb-9039-455e-95b3-5eb57af72b28\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"490889fb-9039-455e-95b3-5eb57af72b28\",\"plan\":1,\"status\":\"Planned\",\"type\":\"Development\",\"what\":\"\"}},\"jRgCUw4nuqhdGwXUVKtLpWzwH4O2\":{\"fbf33bbc-92af-4593-8957-f8302e28c342\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"fbf33bbc-92af-4593-8957-f8302e28c342\",\"plan\":0.5,\"status\":\"Planned\",\"type\":\"Code Review\",\"what\":\"\"}}},\"US5590197\":{\"dIUfOTwVrrRe4lcowYEmxbSTg9L2\":{\"727ed84b-42d1-4cad-b7ba-7fabda0bfe31\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"727ed84b-42d1-4cad-b7ba-7fabda0bfe31\",\"plan\":0.5,\"status\":\"Planned\",\"type\":\"Code Review\",\"what\":\"\"}},\"ohN33v6NBhVv3EA0VjCkLeX5iRG2\":{\"15b77f9c-296e-47e5-8c98-035c2e1e6efd\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"15b77f9c-296e-47e5-8c98-035c2e1e6efd\",\"plan\":2,\"status\":\"Completed\",\"type\":\"Analysis\",\"what\":\"\"},\"add27ad4-ef5b-400c-979a-1c6c05fc62d2\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"add27ad4-ef5b-400c-979a-1c6c05fc62d2\",\"plan\":1,\"status\":\"Completed\",\"type\":\"Development\",\"what\":\"\"}}},\"US5590199\":{\"dIUfOTwVrrRe4lcowYEmxbSTg9L2\":{\"85eaf97e-7372-4eb1-83cf-dfd14bb9e06c\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"85eaf97e-7372-4eb1-83cf-dfd14bb9e06c\",\"plan\":2,\"status\":\"Planned\",\"type\":\"Analysis\",\"what\":\"\"},\"c92ab7f1-b2b8-416e-9dfe-508a574042f5\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"c92ab7f1-b2b8-416e-9dfe-508a574042f5\",\"plan\":1,\"status\":\"Planned\",\"type\":\"Development\",\"what\":\"\"}},\"jRgCUw4nuqhdGwXUVKtLpWzwH4O2\":{\"e7723c78-01ec-453f-b3a2-d0921d9c6811\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"e7723c78-01ec-453f-b3a2-d0921d9c6811\",\"plan\":0.5,\"status\":\"Planned\",\"type\":\"Code Review\",\"what\":\"\"}}},\"US5590637\":{\"dIUfOTwVrrRe4lcowYEmxbSTg9L2\":{\"de4a2ce2-d26e-4ca0-b753-58abbbe303be\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"de4a2ce2-d26e-4ca0-b753-58abbbe303be\",\"plan\":1,\"status\":\"Planned\",\"type\":\"Development\",\"what\":\"\"}},\"jRgCUw4nuqhdGwXUVKtLpWzwH4O2\":{\"76ea84eb-2e08-4e15-99df-3c94112640f9\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"76ea84eb-2e08-4e15-99df-3c94112640f9\",\"plan\":0.5,\"status\":\"Planned\",\"type\":\"Code Review\",\"what\":\"\"}}},\"US5593026\":{\"dIUfOTwVrrRe4lcowYEmxbSTg9L2\":{\"41ba2681-4c71-483f-8947-34401338d69e\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"41ba2681-4c71-483f-8947-34401338d69e\",\"plan\":2,\"status\":\"Planned\",\"type\":\"Analysis\",\"what\":\"\"}}},\"US5593556\":{\"dIUfOTwVrrRe4lcowYEmxbSTg9L2\":{\"498e4ffb-e7dc-4da1-9e41-4fe4ebe30f04\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"498e4ffb-e7dc-4da1-9e41-4fe4ebe30f04\",\"plan\":0.5,\"status\":\"Planned\",\"type\":\"Code Review\",\"what\":\"\"}},\"ohN33v6NBhVv3EA0VjCkLeX5iRG2\":{\"6e98bde0-7ddd-4a28-9d5e-2fd2c629d952\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"6e98bde0-7ddd-4a28-9d5e-2fd2c629d952\",\"plan\":1,\"status\":\"Planned\",\"type\":\"Development\",\"what\":\"\"},\"a7f12faa-3b39-4763-afd3-5ad13bdde296\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"a7f12faa-3b39-4763-afd3-5ad13bdde296\",\"plan\":2,\"status\":\"Planned\",\"type\":\"Analysis\",\"what\":\"\"}}},\"US5593652\":{\"dIUfOTwVrrRe4lcowYEmxbSTg9L2\":{\"b6b31969-591f-4d92-8a02-34dc8319b035\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"b6b31969-591f-4d92-8a02-34dc8319b035\",\"plan\":0.5,\"status\":\"Planned\",\"type\":\"Code Review\",\"what\":\"\"}},\"ohN33v6NBhVv3EA0VjCkLeX5iRG2\":{\"1e6df82e-2dad-4486-9893-ecb0f02e2030\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"1e6df82e-2dad-4486-9893-ecb0f02e2030\",\"plan\":2,\"status\":\"Planned\",\"type\":\"Analysis\",\"what\":\"\"},\"6f9e94db-a804-45cc-9759-5884a95678ad\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"6f9e94db-a804-45cc-9759-5884a95678ad\",\"plan\":1,\"status\":\"Planned\",\"type\":\"Development\",\"what\":\"\"}}},\"US5593680\":{\"dIUfOTwVrrRe4lcowYEmxbSTg9L2\":{\"fe9380b5-3a34-4296-af4c-e382c6776309\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"fe9380b5-3a34-4296-af4c-e382c6776309\",\"plan\":0.5,\"status\":\"Planned\",\"type\":\"Code Review\",\"what\":\"\"}},\"ohN33v6NBhVv3EA0VjCkLeX5iRG2\":{\"c2da37eb-6536-411a-90c4-62de9cfc6305\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"c2da37eb-6536-411a-90c4-62de9cfc6305\",\"plan\":2,\"status\":\"Planned\",\"type\":\"Analysis\",\"what\":\"\"},\"fadf209b-b018-43a6-b96e-6e0e0f6ce42d\":{\"client\":true,\"closedOn\":\"0001-01-01T00:00:00\",\"createdOn\":\"2023-04-05T00:00:00\",\"id\":\"fadf209b-b018-43a6-b96e-6e0e0f6ce42d\",\"plan\":1,\"status\":\"Planned\",\"type\":\"Development\",\"what\":\"\"}}},\"US5594019\":{\"ohN33v6NBhVv3EA0VjCkLeX5iRG2\":{\"1ad2c8d1-8664-48e3-9124-9bc2ae06c898\":{\"actuals\":{\"20232903\":4,\"20233003\":8},\"client\":true,\"closedOn\":\"2023-03-29T00:00:00\",\"createdOn\":\"2023-03-30T00:00:00\",\"id\":\"1ad2c8d1-8664-48e3-9124-9bc2ae06c898\",\"plan\":9,\"status\":\"in-progress\",\"type\":\"Development\",\"what\":\"Parser\"},\"63bb74f9-b533-4314-81e7-fbd442dd95b2\":{\"actuals\":{\"20230330\":4},\"client\":true,\"closedOn\":\"2023-03-29T00:00:00\",\"createdOn\":\"2023-03-30T00:00:00\",\"id\":\"63bb74f9-b533-4314-81e7-fbd442dd95b2\",\"plan\":9,\"status\":\"In progress\",\"type\":\"Development\",\"what\":\"Parser\"},\"68bfc03e-01e8-412b-afe9-5dd372a79e38\":{\"client\":true,\"closedOn\":\"2023-03-29T00:00:00\",\"createdOn\":\"2023-03-30T00:00:00\",\"id\":\"68bfc03e-01e8-412b-afe9-5dd372a79e38\",\"plan\":9,\"status\":\"Planned\",\"type\":\"Development\",\"what\":\"Parser\"},\"732c5f8d-15d4-4464-ac62-45d853e3bd29\":{\"actuals\":{\"20230331\":5},\"client\":true,\"closedOn\":\"2023-03-29T00:00:00\",\"createdOn\":\"2023-03-30T00:00:00\",\"id\":\"732c5f8d-15d4-4464-ac62-45d853e3bd29\",\"plan\":9,\"status\":\"In progress\",\"type\":\"Development\",\"what\":\"Parser\"}}}}";
+
+            try
+            {
+                var s = new Dictionary<string,Story1>();
+                var ys = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, Dictionary<string, Activity>>>>(x);
+                foreach (var y in ys)
+                {
+                    var storyId = y.Key;
+                    
+                    var story1 = new Story1 { Status = "Planned", StoryPoint = 3 };
+                    foreach (var u in y.Value)
+                    {
+                        var userId = u.Key;
+                        if (!story1.Users.ContainsKey(userId))
+                        {
+                            story1.Users.Add(userId, new Dictionary<string, Activity>());
+                        }
+                        var user = story1.Users[userId];
+
+                        foreach (var v in u.Value)
+                        {
+                            user.Add(v.Key, v.Value);
+
+                        }
+                    }
+                    s.Add(storyId,story1);
+                    
+                }
+                //var sa = new SprintAdaptor();
+                //var p = sa.Adapt(y);
+                var c = JsonSerializer.Serialize(s);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+
+            //var sprintManager = new SprintManager();
+            //var obj = await sprintManager.GetSprintData("essette20230329", "dsfsdfsdf");
+        }
     }
 }
