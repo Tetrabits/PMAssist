@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Activity } from '../../model/activity';
 import { ScrumService } from '../../shared/services/scrum.service';
 import { ProjectService } from '../../shared/services/project.service';
+import { SprintService } from '../../shared/services/sprint.service';
 
 
 export interface Project {
@@ -78,30 +79,37 @@ export class DashboardComponent implements OnInit {
   projects: Project[] = [];
   selectedProject?: Project;
   sprints: sprint[] = [];
+  selectedSprintNumber: number = 0;
+  stories: any;
 
-
-  constructor(private scrumService: ScrumService, private projectService: ProjectService) {
+  constructor(private scrumService: ScrumService, private projectService: ProjectService, private sprintService: SprintService) {
 
 
     projectService.getProjects().subscribe((data: Project[]) => {
-      console.log(data);
 
       let today = new Date();
-      console.log(today);
-
       let currentSprint = data[0].sprints.find(n => n.startsOn <= today && today <= n.endsOn)
-      console.log(currentSprint);
 
-      if (currentSprint === undefined)
-      {
-        currentSprint = data[0].sprints[data[0].sprints.length -1]
+      if (currentSprint === undefined) {
+        currentSprint = data[0].sprints[data[0].sprints.length - 1]
       }
-      console.log(currentSprint);
+
       this.projects = data;
       this.selectedProject = this.projects[0];
       this.sprints = this.selectedProject.sprints;
+      this.selectedSprintNumber = currentSprint.number;
+      console.log(this.selectedSprintNumber);
 
-      scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', currentSprint?.key ||'').subscribe((data: Project) => {
+      let sprintKey = currentSprint?.key || '';
+
+      console.log(sprintKey);
+      sprintService.getStories(sprintKey).subscribe((data: any) =>
+      {
+        console.log(data);
+        this.stories = data;
+      });
+
+      scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', sprintKey).subscribe((data: Project) => {
         
         this.project = data;
         let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);
@@ -111,6 +119,7 @@ export class DashboardComponent implements OnInit {
           progress = 100;
         }
         this.progress = progress;
+                
       });
     });
 
@@ -125,7 +134,12 @@ export class DashboardComponent implements OnInit {
   }
 
   sprintChanged(event: any) {
-    console.log(event);
+    
+    this.sprintService.getStories(event.value.key).subscribe((data: any) => {
+      console.log(data);
+      this.stories = data;
+    });
+
     this.scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', event.value.key).subscribe((data: Project) => {
       console.log(data);
       this.project = data;
