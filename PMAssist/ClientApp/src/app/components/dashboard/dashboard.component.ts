@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Activity } from '../../model/activity';
 import { ScrumService } from '../../shared/services/scrum.service';
 import { ProjectService } from '../../shared/services/project.service';
+import { UserService } from '../../shared/services/user.service';
 
 
 export interface Project {
@@ -61,27 +62,54 @@ export interface EffortCategory {
 
 }
 
+export interface PlanActivity {
+  type?: string;
+  user?: string;
+  what?: string;
+  link?: string;
+  plan?: number;
+}
+
 interface TaskType {
   value: string;
   name: string;
 }
+
+interface UserModel {
+  name: string;
+  status: string;
+  uid: string;
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-   
+
   project: any;
   progress: number = 0;
   sprintKey: string = '';
   projects: Project[] = [];
   selectedProject?: Project;
   sprints: sprint[] = [];
+  planActivity: PlanActivity = {};
 
+  planType: TaskType[] = [{
+    name: "Activity", value: "Activity"
+  },
+  { name: "Story", value: "Story" },
+  { name: "Bug", value: "Bug" }
+  ]
 
-  constructor(private scrumService: ScrumService, private projectService: ProjectService) {
+  users: UserModel[] = [];
 
+  constructor(private scrumService: ScrumService, private projectService: ProjectService,private userService : UserService) {
+
+    userService.getUsers().subscribe((userData) => { 
+      next: this.users = userData
+    });
 
     projectService.getProjects().subscribe((data: Project[]) => {
       console.log(data);
@@ -92,17 +120,16 @@ export class DashboardComponent implements OnInit {
       let currentSprint = data[0].sprints.find(n => n.startsOn <= today && today <= n.endsOn)
       console.log(currentSprint);
 
-      if (currentSprint === undefined)
-      {
-        currentSprint = data[0].sprints[data[0].sprints.length -1]
+      if (currentSprint === undefined) {
+        currentSprint = data[0].sprints[data[0].sprints.length - 1]
       }
       console.log(currentSprint);
       this.projects = data;
       this.selectedProject = this.projects[0];
       this.sprints = this.selectedProject.sprints;
 
-      scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', currentSprint?.key ||'').subscribe((data: Project) => {
-        
+      scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', currentSprint?.key || '').subscribe((data: Project) => {
+
         this.project = data;
         let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);
         let elapsed = (new Date(this.project.endsOn).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
@@ -116,10 +143,12 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
 
   }
-
+  handleErrors(error: any) {
+    console.log(error);
+  }
   projectChanged(event: any) {
     console.log(event);
   }

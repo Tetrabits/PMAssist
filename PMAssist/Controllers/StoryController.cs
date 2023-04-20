@@ -5,7 +5,7 @@ using PMAssist.Models;
 
 namespace PMAssist.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class StoryController : ControllerBase
     {
