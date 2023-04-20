@@ -1,28 +1,32 @@
-<div class="flex flex-row flex-wrap card-container blue-container">
-  <div class="flex align-items-center justify-content-center mr-1 mb-1">
-    <p-dropdown [options]="projects" (onChange)="projectChanged($event)" optionLabel="name"></p-dropdown>
-  </div>
-  <div class="flex align-items-center justify-content-center ml-1 mb-1">
-    <p-dropdown [options]="sprints" optionLabel="number" (onChange)="sprintChanged($event)"></p-dropdown>
-  </div>
-</div>
-
 <div *ngIf="project">
 
-  <div class="flex border-round-top-sm px-2 py-2">
-    <div class="flex flex-grow-1 text-3xl font-bold ">
-      {{project.name}} - Sprint {{project?.sprintNumber}}
+  <div class="flex flex-row flex-wrap mb-1">
+    <div class="flex mr-1">
+      <p-dropdown [options]="projects" (onChange)="projectChanged($event)" optionLabel="name"></p-dropdown>
+    </div>
+    <div class="flex mr-1">
+      <p-dropdown [options]="sprints" [(ngModel)]="selectedSprintNumber" optionLabel="number" (onChange)="sprintChanged($event)"></p-dropdown>
+    </div>
+    <div class="flex mr-1">
       <i *ngIf="progress===100" class="pi pi-lock text-red-500" style="font-size:1.5rem"></i>
     </div>
-    <div class="flex flex-grow">
+    <div class="flex flex-grow-1 flex-column flex-wrap">
+      <div class="mr-1">
+        <p-progressBar [value]="progress"></p-progressBar>
+      </div>
+      <div class="flex flex-row flex-wrap justify-content-between">
+        <div class="flex mr-1">
+          {{project.startsOn|date}}
+        </div>
+
+        <div class="flex mr-1">
+          {{project.endsOn|date}}
+        </div>
+      </div>
+    </div>
+    <div class="flex mr-1">
       <p-button label="Close Sprint" icon="pi pi-lock" iconPos="right" styleClass="p-button-sm"></p-button>
     </div>
-  </div>
-
-  <div class="flex card-container blue-container overflow-hidden mb-1">
-    <div class="flex flex-none  align-items-center justify-content-center bg-primary mr-1 px-2 border-round">{{project.startsOn|date}}</div>
-    <div class="flex-grow-1 align-items-center justify-content-center ml-1 mr-1 border-round"><p-progressBar [value]="progress"></p-progressBar></div>
-    <div class="flex flex-none  align-items-center justify-content-center bg-primary ml-1 mr-1 px-2 border-round">{{project.endsOn|date}}</div>
   </div>
 
   <p-accordion [activeIndex]="1">
@@ -51,16 +55,16 @@
           <p-inputNumber [inputStyle]="{'width':'60px','text-align':'right'}" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="99.99" placeholder="Plan"> </p-inputNumber>
         </div>
         <!--<div class="flex flex-none align-items-center justify-content-center px-1">
-    <p-inputNumber [inputStyle]="{'width':'60px','text-align':'right'}" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="99.99" placeholder="Actual"> </p-inputNumber>
-  </div>-->
+          <p-inputNumber [inputStyle]="{'width':'60px','text-align':'right'}" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="99.99" placeholder="Actual"> </p-inputNumber>
+        </div>-->
         <div class="flex-none flex align-items-center justify-content-center pl-1 pr-2 py-2">
           <p-button icon="pi pi-plus"></p-button>
         </div>
       </div>
 
       <div class="flex flex-row flex-wrap card-container blue-container">
-        <div class="flex align-items-center justify-content-center card border-round m-2">
-          <p-table [value]="project.stories" styleClass="p-datatable-sm" [scrollable]="true" scrollHeight="200px">
+        <div class="flex-1 align-items-center justify-content-center bg-blue-500 card border-round m-2">
+          <p-table [value]="stories" styleClass="p-datatable-sm" [scrollable]="true" scrollHeight="200px">
             <ng-template pTemplate="header" let-columns>
               <tr>
                 <th>Story</th>
@@ -70,7 +74,7 @@
             <ng-template pTemplate="body" let-story>
               <tr>
                 <td>{{story.id}}</td>
-                <td>{{story.points}}</td>
+                <td>{{story.storyPoints}}</td>
               </tr>
             </ng-template>
           </p-table>

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PMAssist.Adaptors;
+﻿using PMAssist.Adaptors;
 using PMAssist.Helpers;
 using PMAssist.Interfaces;
 using PMAssist.Models;
@@ -8,7 +7,7 @@ using System.Text.Json;
 
 namespace PMAssist.Managers
 {
-    public class SprintManager
+    public class SprintManager : ISprintManager
     {
         private static IDataAccessRepository dataAccess;
         public SprintManager(IDataAccessRepository dataAccessRepository)
@@ -28,15 +27,15 @@ namespace PMAssist.Managers
 
         public async Task<ProjectEx> GetSprint(string sprintKey, ProjectEx project)
         {
-            var url = UrlHelper.Sprint.SprintUrl(sprintKey);            
+            var url = UrlHelper.Sprint.SprintUrl(sprintKey);
             var content = await dataAccess.GetData(url);
 
             try
             {
-                var sprint = JsonSerializer.Deserialize<Sprint>(content)??new Sprint();
+                var sprint = JsonSerializer.Deserialize<Sprint>(content) ?? new Sprint();
                 var sprintAdaptor = new SprintAdaptor();
                 var projectEx = sprintAdaptor.Adapt(sprint);
-                sprint = project.Sprints.FirstOrDefault(n => n.Key == sprintKey)?? new Sprint();
+                sprint = project.Sprints.FirstOrDefault(n => n.Key == sprintKey) ?? new Sprint();
                 projectEx.SprintNumber = sprint.Number;
                 projectEx.SprintDuration = sprint.Duration;
                 projectEx.Duration = project.Duration;
@@ -45,14 +44,14 @@ namespace PMAssist.Managers
                 projectEx.EndsOn = sprint.EndsOn;
                 return projectEx;
             }
-            catch (Exception ex )
+            catch (Exception ex)
             {
 
                 throw;
             }
-            
 
-            
+
+
 
             //foreach (var storyKey in sprint.Stories)
             //{
@@ -96,9 +95,25 @@ namespace PMAssist.Managers
             //}
 
 
-            
+
         }
 
+        public async Task<IEnumerable<Story>> GetStories(string sprintKey)
+        {
+            var url = UrlHelper.Sprint.SprintUrl(sprintKey);
+            var content = await dataAccess.GetData(url);
+            var sprint = JsonSerializer.Deserialize<Sprint>(content);
 
+            var stories = new List<Story>();
+            foreach (var story in sprint?.Stories??new Dictionary<string, Story>())
+            { 
+                var storyKey = story.Key;
+                story.Value.ID = storyKey;
+                story.Value.Users.Clear();
+                stories.Add(story.Value);
+            }
+
+            return stories;
+        }
     }
 }
