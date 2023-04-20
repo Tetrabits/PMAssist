@@ -109,6 +109,11 @@ export class DashboardComponent implements OnInit {
 
   users: UserModel[] = [];
 
+  constructor(private scrumService: ScrumService, private projectService: ProjectService,private userService : UserService) {
+
+    userService.getUsers().subscribe((userData) => { 
+      next: this.users = userData
+    });
 
     projectService.getProjects().subscribe((data: Project[]) => {
 
