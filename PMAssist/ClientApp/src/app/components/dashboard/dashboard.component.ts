@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Activity } from '../../model/activity';
 import { ScrumService } from '../../shared/services/scrum.service';
 import { ProjectService } from '../../shared/services/project.service';
+import { UserService } from '../../shared/services/user.service';
 import { SprintService } from '../../shared/services/sprint.service';
 
 
@@ -62,17 +63,32 @@ export interface EffortCategory {
 
 }
 
+export interface PlanActivity {
+  type?: string;
+  user?: string;
+  what?: string;
+  link?: string;
+  plan?: number;
+}
+
 interface TaskType {
   value: string;
   name: string;
 }
+
+interface UserModel {
+  name: string;
+  status: string;
+  uid: string;
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-   
+
   project: any;
   progress: number = 0;
   sprintKey: string = '';
@@ -81,8 +97,17 @@ export class DashboardComponent implements OnInit {
   sprints: sprint[] = [];
   selectedSprintNumber: number = 0;
   stories: any;
+  planActivity: PlanActivity = {};
 
+  planType: TaskType[] = [{
+    name: "Activity", value: "Activity"
+  },
+  { name: "Story", value: "Story" },
+  { name: "Bug", value: "Bug" }
+  ]
   constructor(private scrumService: ScrumService, private projectService: ProjectService, private sprintService: SprintService) {
+
+  users: UserModel[] = [];
 
 
     projectService.getProjects().subscribe((data: Project[]) => {
@@ -125,10 +150,12 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
 
   }
-
+  handleErrors(error: any) {
+    console.log(error);
+  }
   projectChanged(event: any) {
     console.log(event);
   }

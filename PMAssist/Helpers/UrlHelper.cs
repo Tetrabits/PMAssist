@@ -64,7 +64,11 @@
             {
                 return $"{baseUrl}/{sprintKey}/activities/{userKey}/{activityKey}/status";
             }
-            public static string SprintBugUrl(string sprintKey, string bugKey, string userKey, string activityKey)
+            public static string SprintBugUrl(string sprintKey, string bugKey)
+            {
+                return $"{baseUrl}/{sprintKey}/bugs/{bugKey}";
+            }
+            public static string SprintBugActivityUrl(string sprintKey, string bugKey, string userKey, string activityKey)
             {
                 return $"{baseUrl}/{sprintKey}/bugs/{bugKey}/{userKey}/{activityKey}";
             }
@@ -81,17 +85,21 @@
                 return $"{baseUrl}/{sprintKey}/bugs/{bugKey}/RCA";
             }
 
+            public static string SprintStoryUrl(string sprintKey, string storyKey)
+            {
+                return $"{baseUrl}/{sprintKey}/stories/{storyKey}";
+            }
             public static string SprintStoryActivityUrl(string sprintKey, string storyKey, string userKey, string activityKey)
             {
-                return $"{baseUrl}/{sprintKey}/stories/{storyKey}/{userKey}/{activityKey}";
+                return $"{baseUrl}/{sprintKey}/stories/{storyKey}/users/{userKey}/{activityKey}";
             }
             public static string SprintStoryActivityActualsUrl(string sprintKey, string storyKey, string userKey, string activityKey)
             {
-                return $"{baseUrl}/{sprintKey}/stories/{storyKey}/{userKey}/{activityKey}/actuals";
+                return $"{baseUrl}/{sprintKey}/stories/{storyKey}/users/{userKey}/{activityKey}/actuals";
             }
             public static string SprintStoryActivityStatusUrl(string sprintKey, string storyKey, string userKey, string activityKey)
             {
-                return $"{baseUrl}/{sprintKey}/stories/{storyKey}/{userKey}/{activityKey}/status";
+                return $"{baseUrl}/{sprintKey}/stories/{storyKey}/users/{userKey}/{activityKey}/status";
             }
         }
 

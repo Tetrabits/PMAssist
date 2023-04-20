@@ -22,7 +22,9 @@ const PROXY_CONFIG = [
       "/project",
       "/project/getscrumkey",
       "/user",
-      "/sprint"
+          "/sprint",
+      "/plan",
+          "/plan/sprint"
     ],
     target: target,
     secure: false,
