@@ -5,7 +5,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<IUserManager, UserManager>();
-builder.Services.AddSingleton<IPlanManager,PlanManager>();
 builder.Services.AddSingleton<ISprintManager, SprintManager>();
 builder.Services.AddControllersWithViews();
 
