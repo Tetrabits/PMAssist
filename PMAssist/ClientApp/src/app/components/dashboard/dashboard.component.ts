@@ -4,6 +4,31 @@ import { ScrumService } from '../../shared/services/scrum.service';
 import { ProjectService } from '../../shared/services/project.service';
 import { SprintService } from '../../shared/services/sprint.service';
 
+export interface DeliveryExcellance {
+  "duration": string,
+  "numberOfResources": string,
+  "effortCapacity": string,
+  "effortPlanned": string,
+  "effortActual": string,
+  "effortRework": string,
+  "storyPlanned": string,
+  "storyBaselined": string,
+  "storyDelivered": string,
+  "storyAccepted": string,
+  "storyQATested": string,
+  "storyModified": string,
+  "storyPointPlanned": string,
+  "storyPointBaselined": string,
+  "storyPointDelivered": string,
+  "storyPointAccepted": string,
+  "codeReviewInternal": string,
+  "codeReviewExternal": string,
+  "defectQA": string,
+  "defectUAT": string,
+  "defectProduction": string,
+  "defectReopened": string,
+  "unitTestCoverage": string,
+}
 
 export interface Project {
   name: string;
@@ -72,7 +97,7 @@ interface TaskType {
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-   
+
   project: any;
   progress: number = 0;
   sprintKey: string = '';
@@ -81,6 +106,31 @@ export class DashboardComponent implements OnInit {
   sprints: sprint[] = [];
   selectedSprintNumber: number = 0;
   stories: any;
+  da: DeliveryExcellance[] = [{
+    "duration": "0",
+    "numberOfResources": "0",
+    "effortCapacity": "0",
+    "effortPlanned": "0",
+    "effortActual": "0",
+    "effortRework": "0",
+    "storyPlanned": "0",
+    "storyBaselined": "0",
+    "storyDelivered": "0",
+    "storyAccepted": "0",
+    "storyQATested": "0",
+    "storyModified": "0",
+    "storyPointPlanned": "0",
+    "storyPointBaselined": "0",
+    "storyPointDelivered": "0",
+    "storyPointAccepted": "0",
+    "codeReviewInternal": "0",
+    "codeReviewExternal": "0",
+    "defectQA": "0",
+    "defectUAT": "0",
+    "defectProduction": "0",
+    "defectReopened": "0",
+    "unitTestCoverage": "0"
+  }];
 
   constructor(private scrumService: ScrumService, private projectService: ProjectService, private sprintService: SprintService) {
 
@@ -103,14 +153,13 @@ export class DashboardComponent implements OnInit {
       let sprintKey = currentSprint?.key || '';
 
       console.log(sprintKey);
-      sprintService.getStories(sprintKey).subscribe((data: any) =>
-      {
+      sprintService.getStories(sprintKey).subscribe((data: any) => {
         console.log(data);
         this.stories = data;
       });
 
       scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', sprintKey).subscribe((data: Project) => {
-        
+
         this.project = data;
         let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);
         let elapsed = (new Date(this.project.endsOn).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
@@ -119,13 +168,13 @@ export class DashboardComponent implements OnInit {
           progress = 100;
         }
         this.progress = progress;
-                
+
       });
     });
 
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
 
   }
 
@@ -134,7 +183,7 @@ export class DashboardComponent implements OnInit {
   }
 
   sprintChanged(event: any) {
-    
+
     this.sprintService.getStories(event.value.key).subscribe((data: any) => {
       console.log(data);
       this.stories = data;
