@@ -7,5 +7,6 @@ namespace PMAssist.Interfaces
     {
         Task<ProjectEx> GetSprint(string sprintKey, ProjectEx project);
         Task<IEnumerable<Story>> GetStories(string sprintKey);
+        Task AddSprintActivity(ActivityRequestModel activityRequestModel);
     }
 }

@@ -2,6 +2,7 @@
 using PMAssist.Managers;
 using PMAssist.Helpers;
 using PMAssist.Interfaces;
+using PMAssist.Models;
 
 namespace PMAssist.Controllers
 {
@@ -68,6 +69,14 @@ namespace PMAssist.Controllers
 
             return Ok(content);
 
+        }
+
+        [HttpPost]
+        [Route("addactivity")]
+        public async Task<IActionResult> AddActivity(ActivityRequestModel activityRequestModel)
+        {
+            await sprintManager.AddSprintActivity(activityRequestModel);
+            return Ok();
         }
     }
 }
