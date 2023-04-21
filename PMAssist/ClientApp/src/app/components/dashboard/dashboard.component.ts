@@ -124,7 +124,7 @@ export class DashboardComponent implements OnInit {
   selectedSprintNumber: number = 0;
   stories: any;
   da: DeliveryExcellance[] = [{
-    "duration": "0",
+    "duration": "1",
     "numberOfResources": "0",
     "effortCapacity": "0",
     "effortPlanned": "0",
