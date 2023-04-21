@@ -29,7 +29,7 @@ namespace PMAssist.Managers
                     url = $"{UrlHelper.Sprint.SprintStoryActivityUrl(activityRequestModel.SprintKey, activityRequestModel.LinkKey, activityRequestModel.UserKey, activityId)}.json";
                     break;
                 case "Bug":
-                    url = $"{UrlHelper.Sprint.SprintBugUrl(activityRequestModel.SprintKey, activityRequestModel.LinkKey, activityRequestModel.UserKey, activityId)}.json";
+                    url = $"{UrlHelper.Sprint.SprintBugActivityUrl(activityRequestModel.SprintKey, activityRequestModel.LinkKey, activityRequestModel.UserKey, activityId)}.json";
                     break;
             }
             if (!string.IsNullOrWhiteSpace(url))

@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Activity } from '../../model/activity';
 import { ScrumService } from '../../shared/services/scrum.service';
 import { ProjectService } from '../../shared/services/project.service';
+import { UserService } from '../../shared/services/user.service';
 import { SprintService } from '../../shared/services/sprint.service';
+import { SprintActivity } from '../../model/sprintactivity';
 
 
 export interface Project {
@@ -62,17 +64,32 @@ export interface EffortCategory {
 
 }
 
+export interface PlanActivity {
+  type?: TaskType;
+  user?: UserModel;
+  what?: string;
+  link?: string;
+  plan?: number;
+}
+
 interface TaskType {
   value: string;
   name: string;
 }
+
+interface UserModel {
+  name: string;
+  status: string;
+  uid: string;
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-   
+
   project: any;
   progress: number = 0;
   sprintKey: string = '';
@@ -81,9 +98,23 @@ export class DashboardComponent implements OnInit {
   sprints: sprint[] = [];
   selectedSprintNumber: number = 0;
   stories: any;
+  planActivity: PlanActivity = {};
+  sprintData: SprintActivity = {};
 
-  constructor(private scrumService: ScrumService, private projectService: ProjectService, private sprintService: SprintService) {
+  planType: TaskType[] = [{
+    name: "Activity", value: "Activity"
+  },
+  { name: "Story", value: "Story" },
+  { name: "Bug", value: "Bug" }
+  ]
 
+  users: UserModel[] = [];
+
+  constructor(private scrumService: ScrumService, private projectService: ProjectService, private userService: UserService, private sprintService: SprintService) {
+
+    userService.getUsers().subscribe((userData) => {
+      next: this.users = userData
+    });
 
     projectService.getProjects().subscribe((data: Project[]) => {
 
@@ -103,14 +134,13 @@ export class DashboardComponent implements OnInit {
       let sprintKey = currentSprint?.key || '';
 
       console.log(sprintKey);
-      sprintService.getStories(sprintKey).subscribe((data: any) =>
-      {
+      sprintService.getStories(sprintKey).subscribe((data: any) => {
         console.log(data);
         this.stories = data;
       });
 
       scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', sprintKey).subscribe((data: Project) => {
-        
+
         this.project = data;
         let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);
         let elapsed = (new Date(this.project.endsOn).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
@@ -119,22 +149,24 @@ export class DashboardComponent implements OnInit {
           progress = 100;
         }
         this.progress = progress;
-                
+
       });
     });
 
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
 
   }
-
+  handleErrors(error: any) {
+    console.log(error);
+  }
   projectChanged(event: any) {
     console.log(event);
   }
 
   sprintChanged(event: any) {
-    
+
     this.sprintService.getStories(event.value.key).subscribe((data: any) => {
       console.log(data);
       this.stories = data;
@@ -208,6 +240,49 @@ export class DashboardComponent implements OnInit {
     activities.push(activity)
   }
 
+  addActivity() {
+    this.sprintData.authToken = '';
+    this.sprintData.sprintKey = this.sprintKey;
+    this.sprintData.linkType = this.planActivity.type?.name;
+
+    switch (this.planActivity.type?.value) {
+      case 'Activity':
+        if (this.planActivity.user === undefined || this.planActivity.user === null) {
+          alert('Select user to add activity');
+        } else {
+          this.sprintData.userKey = this.planActivity.user.name;
+          this.sprintData.linkKey = this.planActivity.link;
+          if (this.sprintData.activity) {
+            this.sprintData.activity.client = true;
+            this.sprintData.activity.createdOn = new Date();
+            this.sprintData.activity.what = this.planActivity.what;
+            this.sprintData.activity.plan = this.planActivity.plan;
+            this.sprintData.activity.status = 'Planned';
+          }
+        }
+        break;
+      case 'Story':
+        this.sprintData.linkKey = this.planActivity.what;
+        if (this.sprintData.activity) {
+          this.sprintData.activity.plan = this.planActivity.plan;
+          this.sprintData.activity.status = 'Planned';
+        }
+        break;
+      case 'Bug':
+        this.sprintData.linkKey = this.planActivity.link;
+        if (this.sprintData.activity) {
+          this.sprintData.activity.plan = this.planActivity.plan;
+          this.sprintData.activity.what = this.planActivity.what;
+          this.sprintData.activity.status = 'Planned';
+        }
+        break;
+    }
+    this.sprintService.addActivity(this.sprintData).subscribe({
+      next: this.getSprintData.bind(this),
+      error: this.handleErrors.bind(this)
+    });
+  }
+
   moveRight(userTask: any) {
     if (userTask.status === 'Planned') {
       userTask.status = 'In Progress'
@@ -237,5 +312,7 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-
+  getSprintData(status: any) {
+    console.log('Activity added sucessfully')
+  }
 }
