@@ -148,18 +148,17 @@ export class DashboardComponent implements OnInit {
     "defectReopened": "0",
     "unitTestCoverage": "0"
   }];
-  planActivity: PlanActivity = {};
-  sprintData: SprintActivity = {};
+    planActivity: PlanActivity = {};
+    sprintData: SprintActivity = {};
 
-  planType: TaskType[] = [{
-    name: "Activity", value: "Activity"
-  },
-  { name: "Story", value: "Story" },
-  { name: "Bug", value: "Bug" }
-  ]
+    planType: TaskType[] = [{
+        name: "Activity", value: "Activity"
+    },
+    { name: "Story", value: "Story" },
+    { name: "Bug", value: "Bug" }
+    ]
 
-  users: UserModel[] = [];
-
+    users: UserModel[] = [];
   constructor(private scrumService: ScrumService, private projectService: ProjectService, private userService: UserService, private sprintService: SprintService) {
 
     userService.getUsers().subscribe((userData) => {
