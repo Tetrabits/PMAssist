@@ -6,6 +6,31 @@ import { UserService } from '../../shared/services/user.service';
 import { SprintService } from '../../shared/services/sprint.service';
 import { SprintActivity } from '../../model/sprintactivity';
 
+export interface DeliveryExcellance {
+  "duration": string,
+  "numberOfResources": string,
+  "effortCapacity": string,
+  "effortPlanned": string,
+  "effortActual": string,
+  "effortRework": string,
+  "storyPlanned": string,
+  "storyBaselined": string,
+  "storyDelivered": string,
+  "storyAccepted": string,
+  "storyQATested": string,
+  "storyModified": string,
+  "storyPointPlanned": string,
+  "storyPointBaselined": string,
+  "storyPointDelivered": string,
+  "storyPointAccepted": string,
+  "codeReviewInternal": string,
+  "codeReviewExternal": string,
+  "defectQA": string,
+  "defectUAT": string,
+  "defectProduction": string,
+  "defectReopened": string,
+  "unitTestCoverage": string,
+}
 
 export interface Project {
   name: string;
@@ -98,18 +123,42 @@ export class DashboardComponent implements OnInit {
   sprints: sprint[] = [];
   selectedSprintNumber: number = 0;
   stories: any;
-  planActivity: PlanActivity = {};
-  sprintData: SprintActivity = {};
+  da: DeliveryExcellance[] = [{
+    "duration": "1",
+    "numberOfResources": "0",
+    "effortCapacity": "0",
+    "effortPlanned": "0",
+    "effortActual": "0",
+    "effortRework": "0",
+    "storyPlanned": "0",
+    "storyBaselined": "0",
+    "storyDelivered": "0",
+    "storyAccepted": "0",
+    "storyQATested": "0",
+    "storyModified": "0",
+    "storyPointPlanned": "0",
+    "storyPointBaselined": "0",
+    "storyPointDelivered": "0",
+    "storyPointAccepted": "0",
+    "codeReviewInternal": "0",
+    "codeReviewExternal": "0",
+    "defectQA": "0",
+    "defectUAT": "0",
+    "defectProduction": "0",
+    "defectReopened": "0",
+    "unitTestCoverage": "0"
+  }];
+    planActivity: PlanActivity = {};
+    sprintData: SprintActivity = {};
 
-  planType: TaskType[] = [{
-    name: "Activity", value: "Activity"
-  },
-  { name: "Story", value: "Story" },
-  { name: "Bug", value: "Bug" }
-  ]
+    planType: TaskType[] = [{
+        name: "Activity", value: "Activity"
+    },
+    { name: "Story", value: "Story" },
+    { name: "Bug", value: "Bug" }
+    ]
 
-  users: UserModel[] = [];
-
+    users: UserModel[] = [];
   constructor(private scrumService: ScrumService, private projectService: ProjectService, private userService: UserService, private sprintService: SprintService) {
 
     userService.getUsers().subscribe((userData) => {
