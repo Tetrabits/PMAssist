@@ -6,7 +6,7 @@ export interface SprintActivity {
   linkType?: string;
   linkKey?: string;
   userKey?: string;
-  activity?: Activity;
+  activity: Activity;
   spentOn?: Date;
   howMuch?: string;
 }

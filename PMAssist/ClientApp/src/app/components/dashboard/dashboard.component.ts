@@ -89,14 +89,6 @@ export interface EffortCategory {
 
 }
 
-export interface PlanActivity {
-  type?: TaskType;
-  user?: UserModel;
-  what?: string;
-  link?: string;
-  plan?: number;
-}
-
 interface TaskType {
   value: string;
   name: string;
@@ -148,8 +140,16 @@ export class DashboardComponent implements OnInit {
     "defectReopened": "0",
     "unitTestCoverage": "0"
   }];
-    planActivity: PlanActivity = {};
-    sprintData: SprintActivity = {};
+
+  sprintData: SprintActivity = {
+    activity: {
+      client : true,
+      createdOn : new Date(),
+      what: '',
+      plan: 0,
+      status:'Planned'
+    }
+  };
 
     planType: TaskType[] = [{
         name: "Activity", value: "Activity"
@@ -180,15 +180,15 @@ export class DashboardComponent implements OnInit {
       this.selectedSprintNumber = currentSprint.number;
       console.log(this.selectedSprintNumber);
 
-      let sprintKey = currentSprint?.key || '';
+      this.sprintKey = currentSprint?.key || '';
 
-      console.log(sprintKey);
-      sprintService.getStories(sprintKey).subscribe((data: any) => {
+      console.log(this.sprintKey);
+      sprintService.getStories(this.sprintKey).subscribe((data: any) => {
         console.log(data);
         this.stories = data;
       });
 
-      scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', sprintKey).subscribe((data: Project) => {
+      scrumService.getScrumDataBySprintKey(this.selectedProject?.projectKey || '', this.sprintKey).subscribe((data: Project) => {
 
         this.project = data;
         let total = (new Date(this.project.endsOn).getTime() - new Date(this.project.startsOn).getTime()) / (1000 * 3600 * 24);
@@ -292,40 +292,7 @@ export class DashboardComponent implements OnInit {
   addActivity() {
     this.sprintData.authToken = '';
     this.sprintData.sprintKey = this.sprintKey;
-    this.sprintData.linkType = this.planActivity.type?.name;
 
-    switch (this.planActivity.type?.value) {
-      case 'Activity':
-        if (this.planActivity.user === undefined || this.planActivity.user === null) {
-          alert('Select user to add activity');
-        } else {
-          this.sprintData.userKey = this.planActivity.user.name;
-          this.sprintData.linkKey = this.planActivity.link;
-          if (this.sprintData.activity) {
-            this.sprintData.activity.client = true;
-            this.sprintData.activity.createdOn = new Date();
-            this.sprintData.activity.what = this.planActivity.what;
-            this.sprintData.activity.plan = this.planActivity.plan;
-            this.sprintData.activity.status = 'Planned';
-          }
-        }
-        break;
-      case 'Story':
-        this.sprintData.linkKey = this.planActivity.what;
-        if (this.sprintData.activity) {
-          this.sprintData.activity.plan = this.planActivity.plan;
-          this.sprintData.activity.status = 'Planned';
-        }
-        break;
-      case 'Bug':
-        this.sprintData.linkKey = this.planActivity.link;
-        if (this.sprintData.activity) {
-          this.sprintData.activity.plan = this.planActivity.plan;
-          this.sprintData.activity.what = this.planActivity.what;
-          this.sprintData.activity.status = 'Planned';
-        }
-        break;
-    }
     this.sprintService.addActivity(this.sprintData).subscribe({
       next: this.getSprintData.bind(this),
       error: this.handleErrors.bind(this)

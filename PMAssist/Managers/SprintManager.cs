@@ -129,12 +129,12 @@ namespace PMAssist.Managers
                     data = JsonSerializer.Serialize(activityRequestModel.Activity);
                     break;
                 case "Story":
-                    url = $"{UrlHelper.Sprint.SprintStoryUrl(activityRequestModel.SprintKey, activityRequestModel.LinkKey)}.json";
+                    url = $"{UrlHelper.Sprint.SprintStoryUrl(activityRequestModel.SprintKey, activityRequestModel.Activity.What)}.json";
                     data = $"{{\"status\":\"{activityRequestModel.Activity.Status}\",\"storypoint\":\"{activityRequestModel.Activity.Plan}\"}}";
                     break;
                 case "Bug":
-                    url = $"{UrlHelper.Sprint.SprintBugUrl(activityRequestModel.SprintKey, activityRequestModel.LinkKey)}.json";
-                    data = $"{{\"rca\":{activityRequestModel.Activity.What}}}";
+                    url = $"{UrlHelper.Sprint.SprintBugUrl(activityRequestModel.SprintKey, activityRequestModel.Activity.What)}.json";
+                    data = $"{{\"story\":{activityRequestModel.LinkKey}}}";
                     break;
             }
             if (!string.IsNullOrWhiteSpace(url) && !string.IsNullOrWhiteSpace(data))
