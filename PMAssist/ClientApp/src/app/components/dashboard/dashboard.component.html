@@ -1,1 +1,93 @@
-{{user.displayName}}
+<div class="flex flex-row flex-wrap card-container blue-container">
+  <div class="flex align-items-center justify-content-center mr-1 mb-1">
+    <p-dropdown [options]="projects" (onChange)="projectChanged($event)" optionLabel="name"></p-dropdown>
+  </div>
+  <div class="flex align-items-center justify-content-center ml-1 mb-1">
+    <p-dropdown [options]="sprints" optionLabel="number" (onChange)="sprintChanged($event)"></p-dropdown>
+  </div>
+</div>
+
+<div *ngIf="project">
+  <div class="card mb-1">
+
+    <div class="flex ">
+      <div class="flex-grow-1 align-items-center justify-content-center text-3xl font-bold bg-secondary border-round-top-sm px-2">
+        {{project.name}} - Sprint {{project?.sprintNumber}}
+        <i *ngIf="progress===100" class="pi pi-lock text-red-500" style="font-size:1.5rem"></i>
+      </div>
+    </div>
+
+    <div class="flex card-container blue-container overflow-hidden">
+      <div class="flex-none flex align-items-center justify-content-center bg-primary m-2 px-2 border-1 border-round">{{project.startsOn|date}}</div>
+      <div class="flex-grow-1 align-items-center justify-content-center m-2 border-round"><p-progressBar [value]="progress"></p-progressBar></div>
+      <div class="flex-none flex align-items-center justify-content-center bg-primary m-2 px-2 border-1 border-round">{{project.endsOn|date}}</div>
+    </div>
+
+  </div>
+  <p-accordion [activeIndex]="1">
+    <p-accordionTab header="Plan">
+
+      <div class="flex flex-row flex-wrap card-container blue-container">
+        <div class="flex align-items-center justify-content-center card border-round m-2">
+          <p-table [value]="project.stories" styleClass="p-datatable-sm" [scrollable]="true" scrollHeight="200px">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th>Story</th>
+                <th>Points</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-story>
+              <tr>
+                <td>{{story.id}}</td>
+                <td>{{story.points}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        <div class="flex align-items-center card border-round  m-2">
+          <p-table [value]="project.bugs" styleClass="p-datatable-sm" [scrollable]="true" scrollHeight="200px">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th>ID</th>
+                <th>RCA</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-bug>
+              <tr>
+                <td>{{bug.id}}</td>
+                <td>{{bug.rca}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </p-accordionTab>
+
+    <p-accordionTab *ngFor="let user of project.users">
+      <ng-template pTemplate="header">
+        <div class="flex-grow-1 flex align-items-center">{{user.name}}</div>
+      </ng-template>
+      <ng-template pTemplate="content">
+
+        <p-tabView>
+          <p-tabPanel header="Yesterday - {{user.yesterdayActivities.length}} / {{effort(user.yesterdayActivities)}}">
+            <div class="flex flex-row-reverse w-full">
+              <p-button label="Close Day" icon="pi pi-lock" iconPos="right" (click)="closeDay(user)"></p-button>
+            </div>
+            <app-activity [for]="'yesterday'" (addWork)="addTask($event, user.yesterdayActivities)"></app-activity>
+            <app-activities [activities]="user.yesterdayActivities" [for]="'yesterday'"></app-activities>
+          </p-tabPanel>
+          <p-tabPanel header="Today - {{user.activities.length}}">
+            <app-activity [for]="'today'" (addWork)="addTask($event, user.activities)"></app-activity>
+            <app-activities [activities]="user.activities" [for]="'today'"></app-activities>
+          </p-tabPanel>
+          <p-tabPanel header="Future - {{user.futureActivities.length}}">
+            <app-activity [for]="'future'" (addWork)="addTask($event, user.futureActivities)"></app-activity>
+            <app-activities [activities]="user.futureActivities" [for]="'future'"></app-activities>
+          </p-tabPanel>
+
+        </p-tabView>
+      </ng-template>
+    </p-accordionTab>
+  </p-accordion>
+</div>

@@ -30,8 +30,18 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LogoutComponent } from './components/logout/logout.component';
 
 import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { TableModule } from 'primeng/table';
+import { AccordionModule } from 'primeng/accordion';
+import { DropdownModule } from 'primeng/dropdown';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { TagModule } from 'primeng/tag';
 
 import { LeaveCalendarComponent } from './components/leavecalendar/leavecalendar.component';
+import { WorkComponent } from './components/work/work.component';
+import { ActivityComponent } from './components/activity/activity.component';
+import { ActivitiesComponent } from './components/activities/activities.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +53,10 @@ import { LeaveCalendarComponent } from './components/leavecalendar/leavecalendar
     LoginComponent,
     DashboardComponent,
     LogoutComponent,
-    LeaveCalendarComponent
+    LeaveCalendarComponent,
+    WorkComponent,
+    ActivityComponent,
+    ActivitiesComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -60,11 +73,18 @@ import { LeaveCalendarComponent } from './components/leavecalendar/leavecalendar
     ]),
     AngularFireModule.initializeApp(environment.firebase),
     ButtonModule,
+    CalendarModule,
+    InputNumberModule,
+    TableModule,
+    AccordionModule,
+    DropdownModule,
     BrowserAnimationsModule,
     DialogModule,
     TabViewModule,
     InputTextModule,
     CheckboxModule,
+    ProgressBarModule,
+    TagModule,
     FullCalendarModule
   ],
   providers: [AuthService,DatePipe],

@@ -14,3 +14,12 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+html, body {
+  font-size: small;
+  height: 100%;
+}
+
+body, .p-component {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+}

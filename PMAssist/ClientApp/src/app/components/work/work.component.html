@@ -1,0 +1,29 @@
+<div class="flex-container">
+  <div><h4>Task:</h4></div>
+  <div style="flex: 0 0 125px; padding: 2px">
+    <label for="taskdate" class="p-sr-only">Date</label>
+    <p-calendar id="taskdate" [(ngModel)]="work.date" dateFormat="M dd, yy" [disabled]="disableDate">
+    </p-calendar>
+  </div>
+  <div style="flex: 0 0 150px; padding: 2px">
+    <input style="width: 100%;" type="text" pInputText [(ngModel)]="work.userStory"
+           placeholder="User Story" />
+  </div>
+  <div style="flex: 0 0 375px; padding: 2px">
+    <input style="width: 100%;" type="text" pInputText [(ngModel)]="work.what"
+           placeholder="What" />
+  </div>
+  <div style="flex: 0 0 200px; padding: 2px">
+    <p-dropdown [style]="{width:'100%'}" [options]="taskTypes" [(ngModel)]="work.type"
+                placeholder="Type" optionLabel="name" [showClear]="true">
+    </p-dropdown>
+  </div>
+  <div style="flex: 0 0 50px; padding: 2px">
+    <input style="width: 100%;" type="text" pInputText [(ngModel)]="work.planEffort"
+           placeholder="Plan" />
+  </div>
+  <div style="flex: 0 0 100px; padding: 2px">
+    <button pButton type="button" label="  Add  " (click)="addTask()"></button>
+  </div>
+</div>
+<br />
